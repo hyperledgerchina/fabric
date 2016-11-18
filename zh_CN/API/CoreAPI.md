@@ -7,11 +7,11 @@
 1. [命令行](#命令行)
 2. [REST API](#rest-api)
 3. [Node.js应用程序](#nodejs应用程序)
-   * [使用Swagger](#using-swagger-js-plugin)
-   * [弹珠示例应用程序](#marbles-demo-application)
-   * [商业票据示例应用程序](#commercial-paper-demo-application)
+   * [使用Swagger](#使用swagger-js插件)
+   * [弹珠示例应用程序](#弹珠示例应用)
+   * [商业票据示例应用程序](#商业票据示例应用程序)
 
-**注意：** 如果你正在安全模式下使用API，请在继续下文之前先回顾[安全设置说明](https://github.com/hyperledgerchina/fabric_zh_CN/blob/v0.6/zh_CN/Setup/Chaincode-setup.md#security-setup-optional)。 
+**注意：** 如果你正在安全模式下使用API，请在继续下文之前先回顾[安全设置说明](https://github.com/hyperledgerchina/fabric_zh_CN/blob/v0.6_zh_CN/zh_CN/Setup/Chaincode-setup.md#security-setup-optional)。 
 
 ## 命令行
 
@@ -20,7 +20,7 @@
     cd /opt/gopath/src/github.com/hyperledger/fabric
     build/bin/peer
 
-能看到和下面示例类似的输出：（**注意：** 下面的根命令（peer）是硬编码在[main.go](https://github.com/hyperledger/fabric/blob/v0.6/main.go)中的。现在的构建会创建一个*peer*可执行文件。）
+能看到和下面示例类似的输出：（**注意：** 下面的根命令（peer）是硬编码在[main.go](https://github.com/hyperledger/fabric/blob/v0.6/peer/main.go)中的。现在的构建会创建一个*peer*可执行文件。）
 
 ```
     Usage:
@@ -152,21 +152,21 @@ message Block {
 
 如果用Swagger学习REST API，请点[这里](https://github.com/hyperledger/fabric/blob/v0.6/core/rest/rest_api.json)。可以直接把这个服务描述文件上传到Swagger服务中，或者，你喜欢的话，也可以按照后面的[介绍](#to-set-up-swagger-ui)在本地安装Swagger。
 
-* [Block](#block)
+* [Block](#区块)
   * GET /chain/blocks/{Block}
-* [Blockchain](#blockchain)
+* [Blockchain](#区块链)
   * GET /chain
 * [Chaincode](#chaincode)
     * POST /chaincode
-* [Network](#network)
+* [Network](#网络)
   * GET /network/peers
-* [Registrar](#registrar)
+* [Registrar](#注册)
   * POST /registrar
   * DELETE /registrar/{enrollmentID}
   * GET /registrar/{enrollmentID}
   * GET /registrar/{enrollmentID}/ecert
   * GET /registrar/{enrollmentID}/tcert
-* [Transactions](#transactions)
+* [Transactions](#事务)
     * GET /transactions/{UUID}
 
 #### 区块
