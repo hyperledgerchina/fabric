@@ -20,7 +20,7 @@
     cd /opt/gopath/src/github.com/hyperledger/fabric
     build/bin/peer
 
-能看到和下面示例类似的输出: (**注意: **下面的根命令peer是硬编码在[main.go](https://github.com/hyperledger/fabric/blob/v0.6/peer/main.go)中的。现在的构建会创建一个*peer*可执行文件。)
+能看到和下面示例类似的输出: (**注意:** 下面的根命令peer是硬编码在[main.go](https://github.com/hyperledger/fabric/blob/v0.6/peer/main.go)中的。现在的构建会创建一个*peer*可执行文件。)
 
 ```
     Usage:
@@ -45,9 +45,9 @@
 
 ```
 
-如上面所示，`peer`命令支持几个子命令和标记。为了方便在脚本程序中调用，`peer`命令执行失败时不会返回0值。在命令执行成功时，子命令会在**标准输出**上生成下表的结果: 
+如上面所示，`peer`命令支持几个子命令和标记。为了方便在脚本程序中调用，`peer`命令执行失败时不会返回0值。在命令执行成功时，子命令会在 **标准输出** 上生成下表的结果: 
 
-命令 | **标准输出**上的成功结果
+命令 | **标准输出** 上的成功结果
 --- | ---
 `version`          | [core.yaml](https://github.com/hyperledger/fabric/blob/v0.6/peer/core.yaml)中定义的`peer.version`
 `node start`       | N/A
@@ -72,7 +72,7 @@ chaincode deploy命令会响应一个chaincode的标识符(一个hash)，这个�
 
 `peer chaincode deploy -u jim -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_example02 -c '{"Function":"init", "Args": ["a","100", "b", "200"]}'`
 
-**注意: **如果GOPATH环境变量包含多个路径，chaincode必须在第一个路径下，否则部署操作会失败。
+**注意:** 如果GOPATH环境变量包含多个路径，chaincode必须在第一个路径下，否则部署操作会失败。
 
 ### 验证结果
 
@@ -139,9 +139,9 @@ message Block {
 
 你可以选择任何工具来使用REST API。比如，curl命令或基于浏览器的客户端－火狐的Rest客户端或Chrome的Postman。同样地，也可以通过[Swagger](http://swagger.io/)直接触发REST请求。可以直接用Swagger服务，或者，你喜欢的话，也可以按照后面的[介绍](#to-set-up-swagger-ui)在本地安装Swagger。
 
-**注意: **REST接口默认端口号是`7050`。可以在[core.yaml](https://github.com/hyperledger/fabric/blob/v0.6/peer/core.yaml)中修改`rest.address`。如果使用Vagrant，REST端口的映射定义在[Vagrantfile](https://github.com/hyperledger/fabric/blob/v0.6/devenv/Vagrantfile)。
+**注意:** REST接口默认端口号是`7050`。可以在[core.yaml](https://github.com/hyperledger/fabric/blob/v0.6/peer/core.yaml)中修改`rest.address`。如果使用Vagrant，REST端口的映射定义在[Vagrantfile](https://github.com/hyperledger/fabric/blob/v0.6/devenv/Vagrantfile)。
 
-**构建测试区块链时注意**如果要在本地测试REST API，可以运行TestServerOpenchain_API_GetBlockCount测试来构建一个测试区块链，然后重启peer进程。这个测试实现在[api_test.go](https://github.com/hyperledger/fabric/blob/v0.6/core/rest/api_test.go)，它将创建一个5个区块的区块链。
+**构建测试区块链时注意** 如果要在本地测试REST API，可以运行TestServerOpenchain_API_GetBlockCount测试来构建一个测试区块链，然后重启peer进程。这个测试实现在[api_test.go](https://github.com/hyperledger/fabric/blob/v0.6/core/rest/api_test.go)，它将创建一个5个区块的区块链。
 
 ```
     cd /opt/gopath/src/github.com/hyperledger/fabric/core/rest
