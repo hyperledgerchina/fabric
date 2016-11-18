@@ -47,7 +47,7 @@
 
 如上面所示，`peer`命令支持几个子命令和标记。为了方便在脚本程序中调用，`peer`命令执行失败时不会返回0值。在命令执行成功时，子命令会在 **标准输出** 上生成下表的结果: 
 
-命令 | **标准输出** 上的成功结果
+命令 | 标准输出上的成功结果
 --- | ---
 `version`          | [core.yaml](https://github.com/hyperledger/fabric/blob/v0.6/peer/core.yaml)中定义的`peer.version`
 `node start`       | N/A
@@ -205,7 +205,7 @@ message BlockchainInfo {
 
 使用REST服务`/chaincode`来部署，调用和查询一个指定的chaincode。这个服务实现了[JSON RPC 2.0规范](http://www.jsonrpc.org/specification)，请求中的`method`字段用来表示要调用的chaincode操作。现在支持`deploy`，`invoke`和`query`。
 
-`/chaincode`实现了[JSON RPC 2.0规范](http://www.jsonrpc.org/specification)，所以，请求内容中必须包含`jsonrpc`字段，`method`字段，以及我们例子中的`params`字段。客户端如果想收到请求的响应，还需要在请求内容中添加`id`字段，因为服务端假设没有`id`的请求是一个通知，服务端就不生成响应。
+`/chaincode`实现了[JSON RPC 2.0规范](http://www.jsonrpc.org/specification)，所以，请求内容中必须包含`jsonrpc`字段，`method`字段，以及我们例子中的`params`字段。客户端如果想收到请求的响应，还需要在请求内容中添加`id`字段，因为服务端会把没有`id`的请求假设成一个通知，就不生成响应了。
 
 接下来的这些例子可能会用于部署，调用和查询一个示例chaincode。在部署一个chaincode时，用[ChaincodeSpec](https://github.com/hyperledger/fabric/blob/v0.6/protos/chaincode.proto#L60)来识别部署请求中的chaincode信息。
 
@@ -312,7 +312,7 @@ Chaincode部署的响应:
 }
 ```
 
-Chaincode调用请求的响应内容中，包含了一个确认请求已经成功完成的`status`字段。成功的调用请求，其响应内容中还包含这次事务的事务id。事务的执行时异步的，客户端可以在事务被提交到系统之后，用事务id检查事务的状态。
+Chaincode调用请求的响应内容中，包含了一个确认请求已经成功完成的`status`字段。成功的调用请求，其响应内容中还包含这次事务的事务id。事务的执行是异步的，客户端可以在事务被提交到系统之后，用事务id检查事务的状态。
 
 Chaincode调用的响应: 
 
@@ -452,9 +452,9 @@ message Secret {
 
 DELETE /registrar/{enrollmentID}服务用于删除指定用户的登录令牌。删除成功会返回一个确认信息，否则返回一个授权错误。这个服务不需要请求内容。注意，一个registrationID和registrationPW只能在CA上注册一次，如果这个registrationID对应的用户信息被删除了，这个registrationID也不能用于第二次注册。
 
-GET /registrar/{enrollmentID}/ecert服务用于从CA的本地存储中获取指定用户的注册证书。如果该用户已经在CA上注册了，会响应被URL编码后的注册证书，否则返回错误。客户需要先进行URL解码才能使用的到的证书，URL解码可以用"net/url"包下的QueryUnescape方法。
+GET /registrar/{enrollmentID}/ecert服务用于从CA的本地存储中获取指定用户的注册证书。如果该用户已经在CA上注册了，会响应被URL编码后的注册证书，否则返回错误。客户需要先进行URL解码才能使用该证书，URL解码可以用"net/url"包下的QueryUnescape方法。
 
-/registrar/{enrollmentID}/tcert用于给已在CA上注册的用户提供事务证书。如果用户已注册，会返回一个包含一组URL编码后的事务证书确认信息，否则返回错误。可以通过一个可选的请求查询参数'count'指定想要的事务证书的数量，不传默认返回一个证书，'count'不能大于500。客户需要先进行URL解码才能使用的到的证书，URL解码可以用"net/url"包下的QueryUnescape方法。
+/registrar/{enrollmentID}/tcert用于给已在CA上注册的用户提供事务证书。如果用户已注册，会返回一个包含一组URL编码后的事务证书确认信息，否则返回错误。可以通过一个可选的请求查询参数'count'指定想要的事务证书的数量，不传默认返回一个证书，'count'不能大于500。客户需要先进行URL解码才能使用该证书，URL解码可以用"net/url"包下的QueryUnescape方法。
 
 #### 事务
 
@@ -489,7 +489,7 @@ message Transaction {
 
 ### 设置Swagger-UI
 
-[Swagger](http://swagger.io/)是一个方便的方案，可以让你用一个文件叙述，记录REST API。fabric的REST API被叙述在[rest_api.json](https://github.com/hyperledger/fabric/blob/v0.6/core/rest/rest_api.json)中。直接使用Swagger-UI和peer节点交互需要把可用的Swagger定位文件上传到[Swagger服务](http://swagger.io/)。或者，也可以通过下面的说明在机器上安装Swagger。
+[Swagger](http://swagger.io/)是一个方便的方案，可以让你用一个文件描述，记录REST API。fabric的REST API被描述在[rest_api.json](https://github.com/hyperledger/fabric/blob/v0.6/core/rest/rest_api.json)中。直接使用Swagger-UI和peer节点交互需要把可用的Swagger定义文件上传到[Swagger服务](http://swagger.io/)。或者，也可以通过下面的说明在本地机器上安装Swagger。
 
 1. 可以使用Node.js提供rest_api.json服务。这样做要先在本地安装Node.js，如果还未安装，可以下载[Node.js](https://nodejs.org/en/download/)包并安装。
 
@@ -528,7 +528,7 @@ message Transaction {
     go test -v -run TestServerOpenchain_API_GetBlockCount
     ```
 
-9. 回到浏览器中的Swagger-UI界面，加载API描述文档。现在你应该可以直接从Swagger中发布查询请求到预构建的区块链中了。
+9. 回到浏览器中的Swagger-UI界面，加载API描述文档。现在你应该可以直接从Swagger中调用查询请求到预构建的区块链中了。
 
 ## Node.js应用程序
 
@@ -582,7 +582,7 @@ message Transaction {
 
     `node ./openchain.js`
 
-在控制台上将会看到一些响应，程序在最后会挂起一会。这是对的，因为程序要等待调用事务执行完成之后再执行查询。可以在Sample_1目录下的'openchain_test'文件里看到一份样本输出。
+控制台上会有一些输出，程序在最后会挂起一会。这是对的，因为程序要等待调用事务执行完成之后再执行查询。可以在Sample_1目录下的'openchain_test'文件里看到一份样本输出。
 
 ### [弹珠示例应用](https://github.com/IBM-Blockchain/marbles)
 
