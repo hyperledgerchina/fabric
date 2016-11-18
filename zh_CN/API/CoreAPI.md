@@ -1,26 +1,26 @@
-# APIs - CLI, REST, and Node.js
+# APIs - 命令行,REST和Node.js
 
-## Overview
+## 概述
 
-This document covers the available APIs for interacting with a peer node. Three interface choices are provided:
+本文介绍3种可以和peer节点交互的API：
 
-1. [CLI](#cli)
+1. [命令行](#命令行)
 2. [REST API](#rest-api)
-3. [Node.js Application](#nodejs-application)
-   * [Using Swagger JS Plugin](#using-swagger-js-plugin)
-   * [Marbles Demo Application](#marbles-demo-application)
-   * [Commercial Paper Demo Application](#commercial-paper-demo-application)
+3. [Node.js应用程序](#nodejs应用程序)
+   * [使用Swagger](#using-swagger-js-plugin)
+   * [弹珠示例应用程序](#marbles-demo-application)
+   * [商业票据示例应用程序](#commercial-paper-demo-application)
 
-**Note:** If you are working with APIs with security enabled, please review the [security setup instructions](https://github.com/hyperledger/fabric/blob/master/docs/Setup/Chaincode-setup.md#security-setup-optional) before proceeding.
+**注意：** 如果你正在安全模式下使用API，请在继续下文之前先回顾[安全设置说明](https://github.com/hyperledgerchina/fabric_zh_CN/blob/v0.6/zh_CN/Setup/Chaincode-setup.md#security-setup-optional)。 
 
-## CLI
+## 命令行
 
-To view the currently available CLI commands, execute the following:
+执行以下命令，查看现在可用的命令行命令：
 
     cd /opt/gopath/src/github.com/hyperledger/fabric
     build/bin/peer
 
-You will see output similar to the example below (**NOTE:** rootcommand below is hardcoded in [main.go](https://github.com/hyperledger/fabric/blob/master/main.go). Currently, the build will create a *peer* executable file).
+能看到和下面示例类似的输出：（**注意：** 下面的根命令（peer）是硬编码在[main.go](https://github.com/hyperledger/fabric/blob/v0.6/main.go)中的。现在的构建会创建一个*peer*可执行文件。）
 
 ```
     Usage:
@@ -45,46 +45,42 @@ You will see output similar to the example below (**NOTE:** rootcommand below is
 
 ```
 
-The `peer` command supports several subcommands and flags, as shown above. To
-facilitate its use in scripted applications, the `peer` command always
-produces a non-zero return code in the event of command failure. Upon success,
-many of the subcommands produce a result on **stdout** as shown in the table
-below:
+如上面所示，`peer`命令支持几个子命令和标记。为了方便在脚本程序中使用，`peer`命令执行失败时不会返回0值。在命令执行成功时，子命令会在**标准输出**上生成下表的结果：
 
-Command | **stdout** result in the event of success
+命令 | **标准输出**上的成功结果
 --- | ---
-`version`          | String form of `peer.version` defined in [core.yaml](https://github.com/hyperledger/fabric/blob/master/peer/core.yaml)
+`version`          | [core.yaml](https://github.com/hyperledger/fabric/blob/v0.6/peer/core.yaml)中定义的`peer.version`
 `node start`       | N/A
-`node status`      | String form of [StatusCode](https://github.com/hyperledger/fabric/blob/master/protos/server_admin.proto#L36)
-`node stop`        | String form of [StatusCode](https://github.com/hyperledger/fabric/blob/master/protos/server_admin.proto#L36)
+`node status`      | [StatusCode](https://github.com/hyperledger/fabric/blob/v0.6/protos/server_admin.proto#L36)的字符串形式
+`node stop`        | [StatusCode](https://github.com/hyperledger/fabric/blob/v0.6/protos/server_admin.proto#L36)的字符串形式
 `network login`    | N/A
-`network list`     | The list of network connections to the peer node.
-`chaincode deploy` | The chaincode container name (hash) required for subsequent `chaincode invoke` and `chaincode query` commands
-`chaincode invoke` | The transaction ID (UUID)
-`chaincode query`  | By default, the query result is formatted as a printable string. Command line options support writing this value as raw bytes (-r, --raw), or formatted as the hexadecimal representation of the raw bytes (-x, --hex). If the query response is empty then nothing is output.
+`network list`     | 在区块链网络上连接到该peer节点的其他peer节点
+`chaincode deploy` | chaincode容器名（一个hash），后续的`chaincode invoke`和`chaincode query`会用到
+`chaincode invoke` | 事务的ID（UUID）
+`chaincode query`  | 默认地，查询结果被格式化成能打印的字符串。命令行选项支持返回原始字节(-r，--raw)，或者格式化成16进制的字节(-x，--hex)。如果查询结果是空的，就没有输出。
 
 
-### Deploy a Chaincode
+### 部署Chaincode
 
-Deploy creates the docker image for the chaincode and subsequently deploys the package to the validating peer. An example is below.
+部署操作会为chaincode创建docker镜像，随后会把包部署到验证节点中。如下例：
 
 `peer chaincode deploy -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_example02 -c '{"Function":"init", "Args": ["a","100", "b", "200"]}'`
 
-The response to the chaincode deploy command will contain the chaincode identifier (hash) which will be required on subsequent `chaincode invoke` and `chaincode query` commands in order to identify the deployed chaincode.
+chaincode deploy命令会响应一个chaincode的标识符（一个hash），这个标识符会被后续的`chaincode invoke`和`chaincode query`命令使用，用于分辨已部署的chaincode。
 
-With security enabled, modify the command to include the -u parameter passing the username of a logged in user as follows:
+如果开启了安全设置，要在命令里加入参数-u，传入已登录用户的用户名，如下：
 
 `peer chaincode deploy -u jim -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_example02 -c '{"Function":"init", "Args": ["a","100", "b", "200"]}'`
 
-**Note:** If your GOPATH environment variable contains more than one element, the chaincode must be found in the first one or deployment will fail.
+**注意：**如果GOPATH环境变量包含多个路径，chaincode必须在第一个路径下，否则部署操作会失败。
 
-### Verify Results
+### 验证结果
 
-To verify that the block containing the latest transaction has been added to the blockchain, use the `/chain` REST endpoint from the command line. Target the IP address of either a validating or a non-validating node. In the example below, 172.17.0.2 is the IP address of a validating or a non-validating node and 7050 is the REST interface port defined in [core.yaml](https://github.com/hyperledger/fabric/blob/master/peer/core.yaml).
+可以在命令行中调用REST服务`/chain`，来验证包含最新事务的区块是否已经被添加到区块链中。IP地址要指定到一个验证节点或非验证节点上。在下面的例子中，172.17.0.2是一个验证节点或非验证节点的IP地址，7050是REST接口的端口号。REST服务监听的地址和端口号配置在[core.yaml](https://github.com/hyperledger/fabric/blob/v0.6/peer/core.yaml)中。
 
 `curl 172.17.0.2:7050/chain`
 
-An example of the response is below.
+下面是响应内容：
 
 ```
 {
@@ -93,7 +89,7 @@ An example of the response is below.
 }
 ```
 
-The returned BlockchainInfo message is defined inside [fabric.proto](https://github.com/hyperledger/fabric/blob/master/protos/fabric.proto#L96).
+返回的BlockchainInfo消息被定义在[fabric.proto](https://github.com/hyperledger/fabric/blob/v0.6/protos/fabric.proto#L96)。
 
 ```
 message BlockchainInfo {
@@ -103,11 +99,11 @@ message BlockchainInfo {
 }
 ```
 
-To verify that a specific block is inside the blockchain, use the `/chain/blocks/{Block}` REST endpoint. Likewise, target the IP address of either a validating or a non-validating node on port 7050.
+使用REST服务`/chain/blocks/{Block}`验证一个块是否在区块链中。和上面一样，指定一个验证节点或非验证节点的IP地址以及7050端口号。
 
 `curl 172.17.0.2:7050/chain/blocks/0`
 
-The returned Block message structure is defined inside [fabric.proto](https://github.com/hyperledger/fabric/blob/master/protos/fabric.proto#L84).
+返回的Block消息结构被定义在[fabric.proto](https://github.com/hyperledger/fabric/blob/v0.6/protos/fabric.proto#L84)。
 
 ```
 message Block {
@@ -121,7 +117,7 @@ message Block {
 }
 ```
 
-An example of a returned Block structure is below.
+返回的Block结构的消息：
 
 ```
 {
@@ -137,24 +133,24 @@ An example of a returned Block structure is below.
 }
 ```
 
-For additional information on the available CLI commands, please see the [protocol specification](https://github.com/hyperledger/fabric/blob/master/docs/protocol-spec.md) section 6.3 on CLI.
+还有一些其他的命令行命令的信息，请看[protocol specification](https://github.com/hyperledger/fabric/blob/v0.6/docs/protocol-spec.md)的6.3部分。
 
 ## REST API
 
-You can work with the REST API through any tool of your choice. For example, the curl command line utility or a browser based client such as the Firefox Rest Client or Chrome Postman. You can likewise trigger REST requests directly through [Swagger](http://swagger.io/). You can utilize the Swagger service directly or, if you prefer, you can set up Swagger locally by following the instructions [here](#to-set-up-swagger-ui).
+你可以选择任何工具来使用REST API。比如，curl命令或基于浏览器的客户端－火狐的Rest客户端或Chrome的Postman。同样地，也可以通过[Swagger](http://swagger.io/)直接触发REST请求。可以直接用Swagger服务，或者，你喜欢的话，也可以按照后面的[介绍](#to-set-up-swagger-ui)在本地安装Swagger。
 
-**Note:** The default REST interface port is `7050`. It can be configured in [core.yaml](https://github.com/hyperledger/fabric/blob/master/peer/core.yaml) using the `rest.address` property. If using Vagrant, the REST port mapping is defined in [Vagrantfile](https://github.com/hyperledger/fabric/blob/master/devenv/Vagrantfile).
+**注意：**REST接口默认端口号是`7050`。可以在[core.yaml](https://github.com/hyperledger/fabric/blob/v0.6/peer/core.yaml)中修改`rest.address`。如果使用Vagrant，REST端口的映射定义在[Vagrantfile](https://github.com/hyperledger/fabric/blob/v0.6/devenv/Vagrantfile)。
 
-**Note on constructing a test blockchain** If you want to test the REST API locally, construct a test blockchain by running the TestServerOpenchain_API_GetBlockCount test implemented inside [api_test.go](https://github.com/hyperledger/fabric/blob/master/core/rest/api_test.go). This test will create a test blockchain with 5 blocks. Subsequently restart the peer process.
+**构建测试区块链时注意**如果要在本地测试REST API，可以运行TestServerOpenchain_API_GetBlockCount测试来构建一个测试区块链，然后重启peer进程。这个测试实现在[api_test.go](https://github.com/hyperledger/fabric/blob/v0.6/core/rest/api_test.go)，它将创建一个5个区块的区块链。
 
 ```
     cd /opt/gopath/src/github.com/hyperledger/fabric/core/rest
     go test -v -run TestServerOpenchain_API_GetBlockCount
 ```
 
-### REST Endpoints
+### REST服务 
 
-To learn about the REST API through Swagger, please take a look at the Swagger document [here](https://github.com/hyperledger/fabric/blob/master/core/rest/rest_api.json). You can upload the service description file to the Swagger service directly or, if you prefer, you can set up Swagger locally by following the instructions [here](#to-set-up-swagger-ui).
+如果用Swagger学习REST API，请点[这里](https://github.com/hyperledger/fabric/blob/v0.6/core/rest/rest_api.json)。可以直接把这个服务描述文件上传到Swagger服务中，或者，你喜欢的话，也可以按照后面的[介绍](#to-set-up-swagger-ui)在本地安装Swagger。
 
 * [Block](#block)
   * GET /chain/blocks/{Block}
@@ -173,11 +169,11 @@ To learn about the REST API through Swagger, please take a look at the Swagger d
 * [Transactions](#transactions)
     * GET /transactions/{UUID}
 
-#### Block
+#### 区块
 
 * **GET /chain/blocks/{Block}**
 
-Use the Block API to retrieve the contents of various blocks from the blockchain. The returned Block message structure is defined inside [fabric.proto](https://github.com/hyperledger/fabric/blob/master/protos/fabric.proto#L84).
+使用区块的API从区块链中获取各个区块的内容。返回的Block消息结构定义在[fabric.proto](https://github.com/hyperledger/fabric/blob/v0.6/protos/fabric.proto#L84)。
 
 ```
 message Block {
@@ -189,11 +185,11 @@ message Block {
 }
 ```
 
-#### Blockchain
+#### 区块链
 
 * **GET /chain**
 
-Use the Chain API to retrieve the current state of the blockchain. The returned BlockchainInfo message is defined inside [fabric.proto](https://github.com/hyperledger/fabric/blob/master/protos/fabric.proto#L96).
+使用链的API获取区块链的当前状态。返回的BlockchainInfo消息定义在[fabric.proto](https://github.com/hyperledger/fabric/blob/v0.6/protos/fabric.proto#L96)。
 
 ```
 message BlockchainInfo {
@@ -207,13 +203,13 @@ message BlockchainInfo {
 
 * **POST /chaincode**
 
-Use the /chaincode endpoint to deploy, invoke, and query a target chaincode. This service endpoint implements the [JSON RPC 2.0 specification](http://www.jsonrpc.org/specification) with the payload identifying the desired chaincode operation within the `method` field. The supported methods are `deploy`, `invoke`, and `query`.
+使用REST服务`/chaincode`来部署，调用和查询一个指定的chaincode。这个服务实现了[JSON RPC 2.0规范](http://www.jsonrpc.org/specification)，请求中的`method`字段用来表示要调用的chaincode操作。现在支持`deploy`，`invoke`和`query`。
 
-The /chaincode endpoint implements the [JSON RPC 2.0 specification](http://www.jsonrpc.org/specification) and as such, must have the required fields of `jsonrpc`, `method`, and in our case `params` supplied within the payload. The client should also add the `id` element within the payload if they wish to receive a response to the request. If the `id` element is missing from the request payload, the request is assumed to be a notification and the server will not produce a response.
+`/chaincode`实现了[JSON RPC 2.0规范](http://www.jsonrpc.org/specification)，所以，请求内容中必须包含`jsonrpc`字段，`method`字段，以及我们例子中的`params`字段。客户端如果想收到请求的响应，还需要在请求内容中添加`id`字段，因为服务端假设没有`id`的请求是一个通知，服务端就不生成响应。
 
-The following sample payloads may be used to deploy, invoke, and query a sample chaincode. To deploy a chaincode, supply the [ChaincodeSpec](https://github.com/hyperledger/fabric/blob/master/protos/chaincode.proto#L60) identifying the chaincode to deploy within the request payload.
+接下来的这些例子可能会用于部署，调用和查询一个示例chaincode。在部署一个chaincode时，用[ChaincodeSpec](https://github.com/hyperledger/fabric/blob/v0.6/protos/chaincode.proto#L60)来识别部署请求中的chaincode信息。
 
-Chaincode Deployment Request without security enabled:
+非安全模式下的chaincode部署请求：
 
 ```
 POST host:port/chaincode
@@ -234,9 +230,9 @@ POST host:port/chaincode
 }
 ```
 
-To deploy a chaincode with security enabled, supply the `secureContext` element containing the registrationID of a registered and logged in user together with the payload from above.
+如果在安全模式下部署chaincode，就需要在上面的请求里添加`secureContext`元素，其值是已注册且登录用户的registrationID。
 
-Chaincode Deployment Request with security enabled (add `secureContext` element):
+安全模式下的chaincode部署请求（添加了`secureContext`元素）：
 
 ```
 POST host:port/chaincode
@@ -258,9 +254,9 @@ POST host:port/chaincode
 }
 ```
 
-The response to a chaincode deployment request will contain a `status` element confirming successful completion of the request. The response to a successful deployment request will likewise contain the generated chaincode hash which must be used in subsequent invocation and query requests sent to this chaincode.
+Chaincode部署请求的响应内容中，包含了一个确认请求已经成功完成的`status`字段。成功的部署请求，其响应内容还包含部署时生成的chaincode hash，后续发给这个chaincode的调用和查询请求都需要带上这个hash。
 
-Chaincode Deployment Response:
+Chaincode部署的响应：
 
 ```
 {
@@ -273,9 +269,9 @@ Chaincode Deployment Response:
 }
 ```
 
-To invoke a chaincode, supply the [ChaincodeSpec](https://github.com/hyperledger/fabric/blob/master/protos/chaincode.proto#L60) identifying the chaincode to invoke within the request payload. Note the chaincode `name` field, which is the hash returned from the deployment request.
+调用一个chaincode时，用[ChaincodeSpec](https://github.com/hyperledger/fabric/blob/v0.6/protos/chaincode.proto#L60)来识别调用请求中的chaincode信息。注意，chaincode的`name`字段就是部署请求中返回的hash。
 
-Chaincode Invocation Request without security enabled:
+非安全模式的chaincode调用请求：
 
 ```
 {
@@ -294,9 +290,9 @@ Chaincode Invocation Request without security enabled:
 }
 ```
 
-To invoke a chaincode with security enabled, supply the `secureContext` element containing the registrationID of a registered and logged in user together with the payload from above.
+如果在安全模式下调用chaincode，就需要在上面的请求里添加`secureContext`元素，其值是已注册且登录用户的registrationID。
 
-Chaincode Invocation Request with security enabled (add `secureContext` element):
+安全模式下的chaincode调用请求（添加了`secureContext`元素）：
 
 ```
 {
@@ -316,9 +312,9 @@ Chaincode Invocation Request with security enabled (add `secureContext` element)
 }
 ```
 
-The response to a chaincode invocation request will contain a `status` element confirming successful completion of the request. The response will likewise contain the transaction id number for that specific transaction. The client may use the returned transaction id number to check on the status of the transaction after it has been submitted to the system, as the transaction execution is asynchronous.
+Chaincode调用请求的响应内容中，包含了一个确认请求已经成功完成的`status`字段。成功的调用请求，其响应内容中还包含这次事务的事务id。事务的执行时异步的，客户端可以在事务被提交到系统之后，用事务id检查事务的状态。
 
-Chaincode Invocation Response:
+Chaincode调用的响应：
 
 ```
 {
@@ -331,9 +327,9 @@ Chaincode Invocation Response:
 }
 ```
 
-To query a chaincode, supply the [ChaincodeSpec](https://github.com/hyperledger/fabric/blob/master/protos/chaincode.proto#L60) identifying the chaincode to query within the request payload. Note the chaincode `name` field, which is the hash returned from the deployment request.
+查询一个chaincode时，用[ChaincodeSpec](https://github.com/hyperledger/fabric/blob/v0.6/protos/chaincode.proto#L60)来识别查询请求中的chaincode信息。注意，chaincode的`name`字段就是部署请求中返回的hash。
 
-Chaincode Query Request without security enabled:
+非安全模式的chaincode查询请求：
 
 ```
 {
@@ -352,9 +348,9 @@ Chaincode Query Request without security enabled:
 }
 ```
 
-To query a chaincode with security enabled, supply the `secureContext` element containing the registrationID of a registered and logged in user together with the payload from above.
+如果在安全模式下查询chaincode，就需要在上面的请求里添加`secureContext`元素，其值是已注册且登录用户的registrationID。
 
-Chaincode Query Request with security enabled (add `secureContext` element):
+安全模式下的chaincode查询请求（添加了`secureContext`元素）：
 
 ```
 {
@@ -374,9 +370,10 @@ Chaincode Query Request with security enabled (add `secureContext` element):
 }
 ```
 
-The response to a chaincode query request will contain a `status` element confirming successful completion of the request. The response will likewise contain an appropriate `message`, as defined by the chaincode. The `message` received depends on the chaincode implementation and may be a string or number indicating the value of a specific chaincode variable.
+Chaincode查询请求的响应内容中，包含了一个确认请求已经成功完成的`status`字段。成功的调用请求，其响应内容中还包含对应的`message`，`message`的内容是chaincode定义的，其值取决于chaincode的实现，可以是一个字符串，也可以是一个数字。
 
-Chaincode Query Response:
+Chaincode查询的响应：
+
 
 ```
 {
@@ -389,13 +386,13 @@ Chaincode Query Response:
 }
 ```
 
-#### Network
+#### 网络
 
 * **GET /network/peers**
 
-Use the Network APIs to retrieve information about the network of peer nodes comprising the blockchain network.
+使用网络API可以获取组成区块链网络的节点网络信息。
 
-The /network/peers endpoint returns a list of all existing network connections for the target peer node. The list includes both validating and non-validating peers. The list of peers is returned as type [`PeersMessage`](https://github.com/hyperledger/fabric/blob/master/protos/fabric.proto#L138), containing an array of [`PeerEndpoint`](https://github.com/hyperledger/fabric/blob/master/protos/fabric.proto#L127).
+REST服务/network/peers会返回目标节点上所有正存在的网络连接信息。包含validating peer和non-validating peer。peer的信息以[`PeersMessage`](https://github.com/hyperledger/fabric/blob/v0.6/protos/fabric.proto#L138)类型返回，`PeersMessage`中包含一个[`PeerEndpoint`](https://github.com/hyperledger/fabric/blob/v0.6/protos/fabric.proto#L127)数组。
 
 ```
 message PeersMessage {
@@ -423,7 +420,7 @@ message PeerID {
 }
 ```
 
-#### Registrar
+#### 注册
 
 * **POST /registrar**
 * **DELETE /registrar/{enrollmentID}**
@@ -431,9 +428,9 @@ message PeerID {
 * **GET /registrar/{enrollmentID}/ecert**
 * **GET /registrar/{enrollmentID}/tcert**
 
-Use the Registrar APIs to manage end user registration with the CA. These API endpoints are used to register a user with the CA, determine whether a given user is registered, and to remove any login tokens for a target user preventing them from executing any further transactions. The Registrar APIs are also used to retrieve user enrollment and transaction certificates from the system.
+使用注册API管理终端用户在CA上的注册。这些API用于在CA上注册一个用户，检查一个用户是否已经注册了，删除一个用户的登录令牌以阻止该用户后续发起事务。注册API还可以从系统中取得注册和事务证书。
 
-The /registrar endpoint is used to register a user with the CA. The required Secret payload is defined in [devops.proto](https://github.com/hyperledger/fabric/blob/master/protos/devops.proto#L50).
+/registrar服务用于在CA中注册用户。[devops.proto](https://github.com/hyperledger/fabric/blob/v0.6/protos/devops.proto#L50)定义了注册时需要提交的保密内容。
 
 ```
 message Secret {
@@ -442,7 +439,7 @@ message Secret {
 }
 ```
 
-The response to the registration request is either a confirmation of successful registration or an error, containing a reason for the failure. An example of a valid Secret message to register user 'lukas' is shown below.
+注册请求的响应是一个注册成功信息或包含失败原因的错误信息。下面展示的是个用于注册用户'lukas'的有效保密信息的例子。
 
 ```
 {
@@ -451,19 +448,19 @@ The response to the registration request is either a confirmation of successful 
 }
 ```
 
-The GET /registrar/{enrollmentID} endpoint is used to confirm whether a given user is registered with the CA. If so, a confirmation will be returned. Otherwise, an authorization error will result.
+/registrar/{enrollmentID}服务用于验证一个给定的用户是否已在CA中注册过。如果是，会返回一个确认信息，否则返回一个授权错误。
 
-The DELETE /registrar/{enrollmentID} endpoint is used to delete login tokens for a target user. If the login tokens are deleted successfully, a confirmation will be returned. Otherwise, an authorization error will result. No payload is required for this endpoint. Note, that registration with the CA is a one time process for a given user, utilizing a single-use registrationID and registrationPW. If the user registration is deleted through this API, the user will not be able to register with the CA a second time.
+DELETE /registrar/{enrollmentID}服务用于删除指定用户的登录令牌。删除成功会返回一个确认信息，否则返回一个授权错误。这个服务不需要请求内容。注意，一个registrationID和registrationPW只能在CA上注册一次，如果这个registrationID对应的用户信息被删除了，这个registrationID也不能用于第二次注册。
 
-The GET /registrar/{enrollmentID}/ecert endpoint is used to retrieve the enrollment certificate of a given user from local storage. If the target user has already registered with the CA, the response will include a URL-encoded version of the enrollment certificate. If the target user has not yet registered, an error will be returned. If the client wishes to use the returned enrollment certificate after retrieval, keep in mind that it must be URL-decoded. This can be accomplished with the QueryUnescape method in the "net/url" package.
+GET /registrar/{enrollmentID}/ecert服务用于从CA的本地存储中获取指定用户的注册证书。如果该用户已经在CA上注册了，会响应被URL编码后的注册证书，否则返回错误。客户需要先进行URL解码才能使用的到的证书，URL解码可以用"net/url"包下的QueryUnescape方法。
 
-The /registrar/{enrollmentID}/tcert endpoint retrieves the transaction certificates for a given user that has registered with the certificate authority. If the user has registered, a confirmation message will be returned containing an array of URL-encoded transaction certificates. Otherwise, an error will result. The desired number of transaction certificates is specified with the optional 'count' query parameter. The default number of returned transaction certificates is 1; and 500 is the maximum number of certificates that can be retrieved with a single request. If the client wishes to use the returned transaction certificates after retrieval, keep in mind that they must be URL-decoded. This can be accomplished with the QueryUnescape method in the "net/url" package.
+/registrar/{enrollmentID}/tcert用于给已在CA上注册的用户提供事务证书。如果用户已注册，会返回一个包含一组URL编码后的事务证书确认信息，否则返回错误。可以通过一个可选的请求查询参数'count'指定想要的事务证书的数量，不传默认返回一个证书，'count'不能大于500。客户需要先进行URL解码才能使用的到的证书，URL解码可以用"net/url"包下的QueryUnescape方法。
 
-#### Transactions
+#### 事务
 
 * **GET /transactions/{UUID}**
 
-Use the /transactions/{UUID} endpoint to retrieve an individual transaction matching the UUID from the blockchain. The returned transaction message is defined inside [fabric.proto](https://github.com/hyperledger/fabric/blob/master/protos/fabric.proto#L28).
+用/transactions/{UUID}服务能获取区块链中与该UUID匹配的事务的信息。[fabric.proto](https://github.com/hyperledger/fabric/blob/v0.6/protos/fabric.proto#L28)中定义里返回的事务信息。
 
 ```
 message Transaction {
@@ -488,81 +485,81 @@ message Transaction {
 }
 ```
 
-For additional information on the REST endpoints and more detailed examples, please see the [protocol specification](https://github.com/hyperledger/fabric/blob/master/docs/protocol-spec.md) section 6.2 on the REST API.
+可以看[协议规范](https://github.com/hyperledger/fabric/blob/v0.6/docs/protocol-spec.md)6.2部分的REST API，有更多的REST信息和更详细的例子。
 
-### To set up Swagger-UI
+### 设置Swagger-UI
 
-[Swagger](http://swagger.io/) is a convenient package that allows you to describe and document your REST API in a single file. The REST API is described in [rest_api.json](https://github.com/hyperledger/fabric/blob/master/core/rest/rest_api.json). To interact with the peer node directly through the Swagger-UI, you can upload the available Swagger definition to the [Swagger service](http://swagger.io/). Alternatively, you may set up a Swagger installation on your machine by following the instructions below.
+[Swagger](http://swagger.io/)是一个方便的方案，可以让你用一个文件叙述，记录REST API。fabric的REST API被叙述在[rest_api.json](https://github.com/hyperledger/fabric/blob/v0.6/core/rest/rest_api.json)中。直接使用Swagger-UI和peer节点交互需要把可用的Swagger定位文件上传到[Swagger服务](http://swagger.io/)。或者，也可以通过下面的说明在机器上安装Swagger。
 
-1. You can use Node.js to serve up the rest_api.json locally. To do so, make sure you have Node.js installed on your local machine. If it is not installed, please download the [Node.js](https://nodejs.org/en/download/) package and install it.
+1. 可以使用Node.js提供rest_api.json服务。这样做要先在本地安装Node.js，如果还未安装，可以下载[Node.js](https://nodejs.org/en/download/)包并安装。
 
-2. Install the Node.js http-server package with the command below:
+2. 安装Node.js的http-server包：
 
     `npm install http-server -g`
 
-3. Start up an http-server on your local machine to serve up the rest_api.json.
+3. 启动http-server，对外提供rest_api.json：
 
     ```
     cd /opt/gopath/src/github.com/hyperledger/fabric/core/rest
     http-server -a 0.0.0.0 -p 5554 --cors
     ```
 
-4. Make sure that you are successfully able to access the API description document within your browser at this link:
+4. 确保能用这个地址在浏览器中访问API的描述文档：
 
     `http://localhost:5554/rest_api.json`
 
-5. Download the Swagger-UI package with the following command:
+5. 下载Swagger-UI包：
 
     `git clone https://github.com/swagger-api/swagger-ui.git`
 
-6. Navigate to the /swagger-ui/dist directory and click on the index.html file to bring up the Swagger-UI interface inside your browser.
+6. 进入/swagger-ui/dist目录，点击index.html文件在浏览器中打开Swagger-UI界面。
 
-7. Start up the peer node with no connections to a leader or validator as follows.
+7. 启动一个peer节点，不连接到一个主或验证节点下：
 
     ```
     cd /opt/gopath/src/github.com/hyperledger/fabric
     build/bin/peer node start
     ```
 
-8. If you need to construct a test blockchain on the local peer node, run the the TestServerOpenchain_API_GetBlockCount test implemented inside [api_test.go](https://github.com/hyperledger/fabric/blob/master/core/rest/api_test.go). This test will create a blockchain with 5 blocks. Subsequently restart the peer process.
+8. 如果你需要在这个本地peer节点上构建一个测试区块链，可以运行TestServerOpenchain_API_GetBlockCount测试来构建一个测试区块链，然后重启peer进程。这个测试实现在[api_test.go](https://github.com/hyperledger/fabric/blob/v0.6/core/rest/api_test.go)，它将创建一个5个区块的区块链。
 
     ```
     cd /opt/gopath/src/github.com/hyperledger/fabric/core/rest
     go test -v -run TestServerOpenchain_API_GetBlockCount
     ```
 
-9. Go back to the Swagger-UI interface inside your browser and load the API description. You should now be able to issue queries against the pre-built blockchain directly from Swagger.
+9. 回到浏览器中的Swagger-UI界面，加载API描述文档。现在你应该可以直接从Swagger中发布查询请求到预构建的区块链中了。
 
-## Node.js Application
+## Node.js应用程序
 
-You can interface with the peer process from a Node.js application. One way to accomplish that is by relying on the Swagger API description document, [rest_api.json](https://github.com/hyperledger/fabric/blob/master/core/rest/rest_api.json ) and the [swagger-js plugin](https://github.com/swagger-api/swagger-js). Another way to accomplish that relies upon the IBM Blockchain [JS SDK](https://github.com/IBM-Blockchain/ibm-blockchain-js). Use the approach that you find the most convenient.
+可以通过Node.js应用程序和peer进程交互。一种方式是基于Swagger API描述文档，[rest_api.json](https://github.com/hyperledger/fabric/blob/v0.6/core/rest/rest_api.json)和[swagger-js插件](https://github.com/swagger-api/swagger-js)。另一种方式是依赖IBM Blockchain [JS SDK](https://github.com/IBM-Blockchain/ibm-blockchain-js)。
 
-### [Using Swagger JS Plugin](https://github.com/hyperledger/fabric/blob/master/docs/API/Samples/Sample_1.js)
+### [使用Swagger JS插件](https://github.com/hyperledger/fabric/blob/v0.6/docs/API/Samples/Sample_1.js)
 
-* Demonstrates interfacing with a peer node from a Node.js application.
-* Utilizes the Node.js swagger-js plugin: https://github.com/swagger-api/swagger-js
+* 示范从Node.js应用程序和peer节点的交互
+* 使用Node.js swagger-js插件：https://github.com/swagger-api/swagger-js
 
-**To run:**
+**运行:**
 
-1. Build and install the [fabric core](https://github.com/hyperledger/fabric/blob/master/README.md#building-the-fabric-core-).
+1. 构建安装[fabric core](https://github.com/hyperledger/fabric/blob/v0.6/docs/dev-setup/build.md)
 
     ```
     cd /opt/gopath/src/github.com/hyperledger/fabric
     make peer
     ```
 
-2. Run a local peer node only (not a complete network) with:
+2. 只运行一个本地peer节点（不是完整的网络）：
 
     `build/bin/peer node start`
 
-3. Set up a test blockchain data structure (with 5 blocks only) by running a test from within Vagrant as follows. Subsequently restart the peer process.
+3. 安装测试区块链的数据结构(只有5个区块)，在Vagrant里面运行一个测试，然后重启peer：
 
     ```
     cd /opt/gopath/src/github.com/hyperledger/fabric/core/rest
     go test -v -run TestServerOpenchain_API_GetBlockCount
     ```
 
-4. Start up an http-server on your local machine to serve up the rest_api.json.
+4. 在本机上启动http-server，对外提供rest_api.json：
 
     ```
     npm install http-server -g
@@ -570,42 +567,42 @@ You can interface with the peer process from a Node.js application. One way to a
     http-server -a 0.0.0.0 -p 5554 --cors
     ```
 
-5. Download and unzip [Sample_1.zip](https://github.com/hyperledger/fabric/blob/master/docs/API/Samples/Sample_1.zip)
+5. 下载并解压[Sample_1.zip](https://github.com/hyperledger/fabric/blob/v0.6/docs/API/Samples/Sample_1.zip)
 
     ```
     unzip Sample_1.zip -d Sample_1
     cd Sample_1
     ```
 
-6. Update the api_url variable within [openchain.js](https://github.com/hyperledger/fabric/blob/master/docs/API/Samples/Sample_1.js) to the appropriate URL if it is not already the default
+6. 修改[openchain.js](https://github.com/hyperledger/fabric/blob/v0.6/docs/API/Samples/Sample_1.js)，把api_url修改成正确的值：
 
     `var api_url = 'http://localhost:5554/rest_api.json';`
 
-7. Run the Node.js app
+7. 运行Node.js应用程序
 
     `node ./openchain.js`
 
-You will observe several responses on the console and the program will appear to hang for a few moments at the end. This is expected, as is it waiting for the invocation transaction to complete in order to then execute a query. You can take a look at the sample output of the program inside the 'openchain_test' file located in the Sample_1 directory.
+在控制台上将会看到一些响应，程序在最后会挂起一会。这是对的，因为程序要等待调用事务执行完成之后再执行查询。可以在Sample_1目录下的'openchain_test'文件里看到一份样本输出。
 
-### [Marbles Demo Application](https://github.com/IBM-Blockchain/marbles)
+### [弹珠示例应用](https://github.com/IBM-Blockchain/marbles)
 
-* Demonstrates an alternative way of interfacing with a peer node from a Node.js app.
-* Demonstrates deploying a Blockchain application as a Bluemix service.
+* 另一个通过Node.js应用和peer节点进行交互的示例
+* 部署一个区块链应用到Bluemix服务中的示例
 
-Hold on to your hats everyone, this application is going to demonstrate transferring marbles between two users leveraging IBM Blockchain. We are going to do this in Node.js and a bit of GoLang. The backend of this application will be the GoLang code running in our blockchain network. The chaincode itself will create a marble by storing it to the chaincode state. The chaincode itself is able to store data as a string in a key/value pair setup. Thus we will stringify JSON objects to store more complex structures.
+别惊讶，这个应用程序要演示通过IBM区块链在用户之间转移弹珠。我们要用Node.js和一点GoLang来做，这个应用的后台代码是运行在我们区块链网络中的GoLang代码。Chaincode自己会创建一个弹珠，存到chaincode的状态中。Chaincode自己能在安装的时候以键值对存储字符串数据。我们将把JSON对象字符串化来存储更复杂的数据。
 
-For more inforation on the IBM Blockchain marbles demo, set-up, and instructions, please visit [this page](https://github.com/IBM-Blockchain/marbles).
+更多关于IBM区块链弹珠示例的信息，安装，介绍，请访问[这个页面](https://github.com/IBM-Blockchain/marbles)。
 
-### [Commercial Paper Demo Application](https://github.com/IBM-Blockchain/cp-web)
+### [商业票据示例应用程序](https://github.com/IBM-Blockchain/cp-web)
 
-* Demonstrates an alternative way of interfacing with a peer node from a Node.js app.
-* Demonstrates deploying a Blockchain application as a Bluemix service.
+* 另一个通过Node.js应用和peer节点进行交互的示例
+* 部署一个区块链应用到Bluemix服务中的示例
 
-This application is a demonstration of how a commercial paper trading network might be implemented on IBM Blockchain. The components of the demo are:
+这是一个IBM区块链怎么实现一个商业票据交易网络应用的示例。示例有几部分：
 
-* An interface for creating new users on the network.
-* An interface for creating new commercial papers to trade.
-* A Trade Center for buying and selling existing trades.
-* A special interface just for auditors of the network to examine trades.
+* 一个网络上用于创建新用户的接口
+* 一个为交易创建商业票据的接口
+* 一个用于现有交易买卖的交易中心
+* 一个只为审计者开放的用于检查交易信息的特殊接口
 
-For more inforation on the IBM Blockchain commercial paper demo, set-up, and instructions, please visit [this page](https://github.com/IBM-Blockchain/cp-web).
+更多关于IBM区块链商业票据示例的信息，安装，介绍，请访问[这个页面](https://github.com/IBM-Blockchain/cp-web)。
