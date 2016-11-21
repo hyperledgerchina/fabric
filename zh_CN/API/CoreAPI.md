@@ -45,7 +45,7 @@
 
 ```
 
-如上面所示，`peer`命令支持几个子命令和标记。为了方便在脚本程序中调用，`peer`命令执行失败时不会返回0值。在命令执行成功时，子命令会在 **标准输出** 上生成下表的结果: 
+如上面所示，`peer`命令支持几个子命令和参数标记。为了方便在脚本程序中调用，`peer`命令执行失败时会返回一个非0值。在命令执行成功时，子命令会在 **标准输出** 上生成下表的结果: 
 
 命令 | 标准输出上的成功结果
 --- | ---
@@ -57,22 +57,22 @@
 `network list`     | 在区块链网络上连接到该peer节点的其他peer节点
 `chaincode deploy` | chaincode容器名(一个hash)，后续的`chaincode invoke`和`chaincode query`会用到
 `chaincode invoke` | 事务的ID(UUID)
-`chaincode query`  | 默认地，查询结果被格式化成能打印的字符串。命令行选项支持返回原始字节(-r，--raw)，或者格式化成16进制的字节(-x，--hex)。如果查询结果是空的，就没有输出。
+`chaincode query`  | 默认地，查询结果被格式化成可打印的字符串。命令行选项也支持将查询结果以原始字节的形式返回(-r，--raw)，或者格式化成16进制的字节(-x，--hex)。如果查询结果是空的，就没有输出。
 
 
 ### 部署Chaincode
 
-部署操作会为chaincode创建docker镜像，随后会把包部署到验证节点中。如下例: 
+部署操作会为chaincode创建docker镜像，随后会把chaincode包部署到验证节点中。如下例: 
 
 `peer chaincode deploy -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_example02 -c '{"Function":"init", "Args": ["a","100", "b", "200"]}'`
 
-chaincode deploy命令会响应一个chaincode的标识符(一个hash)，这个标识符会被后续的`chaincode invoke`和`chaincode query`命令使用，用于分辨已部署的chaincode。
+chaincode deploy命令会返回chaincode的标识符(一个hash)，这个标识符会被后续的`chaincode invoke`和`chaincode query`命令使用，用于分辨已部署的chaincode。
 
 如果开启了安全设置，要在命令里加入参数-u，传入已登录用户的用户名，如下: 
 
 `peer chaincode deploy -u jim -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_example02 -c '{"Function":"init", "Args": ["a","100", "b", "200"]}'`
 
-**注意:** 如果GOPATH环境变量包含多个路径，chaincode必须在第一个路径下，否则部署操作会失败。
+**注意:** 如果GOPATH环境变量包含多个路径，chaincode的路径必须是第一个，否则部署操作会失败。
 
 ### 验证结果
 
@@ -230,7 +230,7 @@ POST host:port/chaincode
 }
 ```
 
-如果在安全模式下部署chaincode，就需要在上面的请求里添加`secureContext`元素，其值是已注册且登录用户的registrationID。
+如果在安全模式下部署chaincode，就需要在上面的请求里添加`secureContext`元素，其值是已注册且可登录用户的registrationID。
 
 安全模式下的chaincode部署请求(添加了`secureContext`元素): 
 
@@ -290,7 +290,7 @@ Chaincode部署的响应:
 }
 ```
 
-如果在安全模式下调用chaincode，就需要在上面的请求里添加`secureContext`元素，其值是已注册且登录用户的registrationID。
+如果在安全模式下调用chaincode，就需要在上面的请求里添加`secureContext`元素，其值是已注册且可登录用户的registrationID。
 
 安全模式下的chaincode调用请求(添加了`secureContext`元素): 
 
@@ -348,7 +348,7 @@ Chaincode调用的响应:
 }
 ```
 
-如果在安全模式下查询chaincode，就需要在上面的请求里添加`secureContext`元素，其值是已注册且登录用户的registrationID。
+如果在安全模式下查询chaincode，就需要在上面的请求里添加`secureContext`元素，其值是已注册且可登录用户的registrationID。
 
 安全模式下的chaincode查询请求(添加了`secureContext`元素): 
 
@@ -491,7 +491,8 @@ message Transaction {
 
 [Swagger](http://swagger.io/)是一个方便的方案，可以让你用一个文件描述，记录REST API。fabric的REST API被描述在[rest_api.json](https://github.com/hyperledger/fabric/blob/v0.6/core/rest/rest_api.json)中。直接使用Swagger-UI和peer节点交互需要把可用的Swagger定义文件上传到[Swagger服务](http://swagger.io/)。或者，也可以通过下面的说明在本地机器上安装Swagger。
 
-1. 可以使用Node.js提供rest_api.json服务。这样做要先在本地安装Node.js，如果还未安装，可以下载[Node.js](https://nodejs.org/en/download/)包并安装。
+1. 可以使用Node.js提供rest_api.json服务。这样做要先在本地安装Node.js，如果还未安装，
+可以下载[Node.js](https://nodejs.org/en/download/)包并安装。
 
 2. 安装Node.js的http-server包: 
 
@@ -559,7 +560,7 @@ message Transaction {
     go test -v -run TestServerOpenchain_API_GetBlockCount
     ```
 
-4. 在本机上启动http-server，对外提供rest_api.json: 
+4. 在本机上启动http-server，对外提供如rest_api.json中所描述的API: 
 
     ```
     npm install http-server -g
@@ -587,7 +588,7 @@ message Transaction {
 ### [弹珠示例应用](https://github.com/IBM-Blockchain/marbles)
 
 * 另一个通过Node.js应用和peer节点进行交互的示例
-* 部署一个区块链应用到Bluemix服务中的示例
+* 以IBM Bluemix服务的形式部署一个区块链应用的示例
 
 别惊讶，这个应用程序要演示通过IBM区块链在用户之间转移弹珠。我们要用Node.js和一点GoLang来做，这个应用的后台代码是运行在我们区块链网络中的GoLang代码。Chaincode自己会创建一个弹珠，存到chaincode的状态中。Chaincode自己能在安装的时候以键值对存储字符串数据。我们将把JSON对象字符串化来存储更复杂的数据。
 
