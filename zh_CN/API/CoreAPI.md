@@ -57,9 +57,7 @@
 `network list`     | 在区块链网络上连接到该peer节点的其他peer节点
 `chaincode deploy` | chaincode容器名(一个hash)，后续的`chaincode invoke`和`chaincode query`会用到
 `chaincode invoke` | 事务的ID(UUID)
-`chaincode query`  | 默认地，查询结果被格式化成字符串。命令行选项也支持将查询结果以  
-原始字节的形式返回(-r，--raw)，或者格式化成16进制的字节码(-x，--hex)。如果查询结果是空的，  
-就没有输出。
+`chaincode query`  | 默认地，查询结果被格式化成字符串。命令行选项也支持将查询结果以原始字节的形式返回(-r，--raw)，或者格式化成16进制的字节码(-x，--hex)。如果查询结果是空的,就没有输出。
 
 
 ### 部署Chaincode
