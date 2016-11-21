@@ -72,7 +72,7 @@ chaincode deploy命令会返回chaincode的标识符(一个hash)，这个标识�
 
 `peer chaincode deploy -u jim -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_example02 -c '{"Function":"init", "Args": ["a","100", "b", "200"]}'`
 
-**注意:** 如果GOPATH环境变量包含多个路径，chaincode的路径必须是第一个，否则部署操作会失败。
+**注意:** 如果GOPATH环境变量包含多个路径，chaincode必须在第一个路径下，否则部署操作会失败。
 
 ### 验证结果
 
@@ -230,7 +230,7 @@ POST host:port/chaincode
 }
 ```
 
-如果在安全模式下部署chaincode，就需要在上面的请求里添加`secureContext`元素，其值是已注册且可登录用户的registrationID。
+如果在安全模式下部署chaincode，就需要在上面的请求里添加`secureContext`元素，其值是已注册且登录用户的registrationID。
 
 安全模式下的chaincode部署请求(添加了`secureContext`元素): 
 
@@ -290,7 +290,7 @@ Chaincode部署的响应:
 }
 ```
 
-如果在安全模式下调用chaincode，就需要在上面的请求里添加`secureContext`元素，其值是已注册且可登录用户的registrationID。
+如果在安全模式下调用chaincode，就需要在上面的请求里添加`secureContext`元素，其值是已注册且登录用户的registrationID。
 
 安全模式下的chaincode调用请求(添加了`secureContext`元素): 
 
@@ -348,7 +348,7 @@ Chaincode调用的响应:
 }
 ```
 
-如果在安全模式下查询chaincode，就需要在上面的请求里添加`secureContext`元素，其值是已注册且可登录用户的registrationID。
+如果在安全模式下查询chaincode，就需要在上面的请求里添加`secureContext`元素，其值是已注册且登录用户的registrationID。
 
 安全模式下的chaincode查询请求(添加了`secureContext`元素): 
 
@@ -491,8 +491,7 @@ message Transaction {
 
 [Swagger](http://swagger.io/)是一个方便的方案，可以让你用一个文件描述，记录REST API。fabric的REST API被描述在[rest_api.json](https://github.com/hyperledger/fabric/blob/v0.6/core/rest/rest_api.json)中。直接使用Swagger-UI和peer节点交互需要把可用的Swagger定义文件上传到[Swagger服务](http://swagger.io/)。或者，也可以通过下面的说明在本地机器上安装Swagger。
 
-1. 可以使用Node.js提供rest_api.json服务。这样做要先在本地安装Node.js，如果还未安装，
-可以下载[Node.js](https://nodejs.org/en/download/)包并安装。
+1. 可以使用Node.js提供rest_api.json服务。这样做要先在本地安装Node.js，如果还未安装，可以下载[Node.js](https://nodejs.org/en/download/)包并安装。
 
 2. 安装Node.js的http-server包: 
 
@@ -560,7 +559,7 @@ message Transaction {
     go test -v -run TestServerOpenchain_API_GetBlockCount
     ```
 
-4. 在本机上启动http-server，对外提供如rest_api.json中所描述的API: 
+4. 在本机上启动http-server，对外提供rest_api.json: 
 
     ```
     npm install http-server -g
