@@ -57,7 +57,9 @@
 `network list`     | 在区块链网络上连接到该peer节点的其他peer节点
 `chaincode deploy` | chaincode容器名(一个hash)，后续的`chaincode invoke`和`chaincode query`会用到
 `chaincode invoke` | 事务的ID(UUID)
-`chaincode query`  | 默认地，查询结果被格式化成可打印的字符串。命令行选项也支持将查询结果以原始字节的形式返回(-r，--raw)，或者格式化成16进制的字节(-x，--hex)。如果查询结果是空的，就没有输出。
+`chaincode query`  | 默认地，查询结果被格式化成字符串。命令行选项也支持将查询结果以  
+原始字节的形式返回(-r，--raw)，或者格式化成16进制的字节码(-x，--hex)。如果查询结果是空的，  
+就没有输出。
 
 
 ### 部署Chaincode
@@ -597,7 +599,7 @@ message Transaction {
 ### [商业票据示例应用程序](https://github.com/IBM-Blockchain/cp-web)
 
 * 另一个通过Node.js应用和peer节点进行交互的示例
-* 部署一个区块链应用到Bluemix服务中的示例
+* 以IBM Bluemix服务的形式部署一个区块链应用的示例
 
 这是一个IBM区块链怎么实现一个商业票据交易网络应用的示例。示例有几部分: 
 
