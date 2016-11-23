@@ -1,6 +1,7 @@
 
 
 [v0.6-preview](https://github.com/hyperledger/fabric/tree/v0.6) September 16, 2016
+[v0.6-preview](https://github.com/hyperledger/fabric/tree/v0.6) 2016/09/16
 
 A developer preview release of the Hyperledger Fabric intended
 to exercise the release logistics and stabilize a set of capabilities for
