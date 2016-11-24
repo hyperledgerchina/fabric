@@ -1,18 +1,22 @@
 
-
-[v0.6-preview](https://github.com/hyperledger/fabric/tree/v0.6) September 16, 2016
-[v0.6-preview](https://github.com/hyperledger/fabric/tree/v0.6) 2016/09/16
+[v0.6-预览版](https://github.com/hyperledger/fabric/tree/v0.6) 2016/09/16
 
 A developer preview release of the Hyperledger Fabric intended
 to exercise the release logistics and stabilize a set of capabilities for
-developers to try out. This will be the last release under the original
-architecture. All subsequent releases will deliver on the
-[v1.0 architecture](TODO).
+developers to try out. 
+Hyperledger Fabric的一个开发者预览版
+This will be the last release under the original architecture. 
+这将是旧架构下的最后一个版本。
+All subsequent releases will deliver on the [v1.0 architecture](TODO).
+所有后续版本将实现[架构v1.0](TODO)。
 
 Key enhancements:
+主要改进：
 
 * 8de58ed - NodeSDK doc changes -- FAB-146
+* 8de58ed - NodeSDK 文档变更 -- FAB-146
 * 62d866d - Add flow control to SYNC_STATE_SNAPSHOT
+* 62d866d - 
 * 4d97069 - Adding TLS changes to SDK
 * e9d3ac2 - Node-SDK: add support for fabric events(block, chaincode, transactional)
 * 7ed9533 - Allow deploying Java chaincode from remote git repositories
