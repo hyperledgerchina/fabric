@@ -1,15 +1,15 @@
 # 使用Gerrit
-根据以下指令，通过Gerrit复检系统，你可以与其它开发者对Hyperledger Fabric项目与进行协作开发。
+依照下面的步骤，通过Gerrit复检系统，你可以与其它开发者对Hyperledger Fabric项目进行协作开发。
 
 请确保你订阅了[邮件列表](http://lists.hyperledger.org/mailman/listinfo/hyperledger-fabric)，如果有任何问题，你也可以通过 [Slack](https://hyperledgerproject.slack.com/)寻求帮助。
 
 Gerrit 为用户分配了以下角:
 
-* **提交者**: 可提交修改变更，审查其他代码的变更，并分别投票+1或-1，作出接受或拒绝的建议。
+* **提交者**: 可提交修改变更，审查其他代码的变更，并分别投以+1或-1，作出接受或拒绝的建议。
 * **维护者**: 基于复检的反馈， 投以+2或-2来批准或拒绝变更。
-* **构建者**: (如Jenkins)可以使用构建自动化基础设施，以验证更改。
+* **构建者**: (如Jenkins)使用构建自动化工具来验证更改。
 
-维护者应熟悉[复检](reviewing.md)流程。也欢迎任何人来复检变更，以此来发现该变更文件的价值。
+维护者应熟悉[复检流程](reviewing.md)。也欢迎鼓励任何人来复检变更，以此来发现该变更文件的价值。
 
 ## Git复检
 
@@ -27,7 +27,7 @@ Gerrit有一个**非常**有用的工具叫[Git复检](https://www.mediawiki.org
 
 ##Gerrit存储库的本地克隆
 
-当你要做任何变更，实现新功能或者修复bug。
+当你要实现新功能或者修复bug时。
 
 1. 打开 Gerrit中的 [项目页面](https://gerrit.hyperledger.org/r/#/admin/projects/)
 
@@ -156,5 +156,3 @@ HEAD:refs/for/master%r=rev1@email.com,r=rev2@notemail.com`
 添加过滤器*project:fabric*来使其只有Hyperledger Fabric的项目可视。
 
 通过点击 `My --> Changes` or [链接](https://gerrit.hyperledger.org/r/#/dashboard/self)，来列出你提交的所有变更，或列出那些需要你参与的变更。
-
-信息
