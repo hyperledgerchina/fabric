@@ -1,4 +1,4 @@
-# Submitting a Change to Gerrit
+# 将变更提交到Gerrit中
 
 请在提交变更之前阅读以下的指南，这个指南适用于刚开始接触开源项目的开发者，也适用于对开源项目经验丰富的开发者。
 
@@ -38,6 +38,6 @@ Signed-off-by: Your Name <commit-sender@email.address>
 ```
 Signed-off-by: Your Name <your@email.address>
 ```
-在`Signed-off-by:`后面的名字和邮箱必须与本次提交的所有者一致，请确保`.git/confi`文件已经配置正确，总是通过Gerrit提交变更个it。
+在`Signed-off-by:`后面的名字和邮箱必须与本次提交的所有者一致，请确保`.git/confi`文件已经配置正确，总是通过Gerrit提交变更的全集。
 
 当一个包含在本变更集里的变更是为了启用其他更改，但在最终确定时又并不是本变更集的一部分时，请让复检者知道这一点。

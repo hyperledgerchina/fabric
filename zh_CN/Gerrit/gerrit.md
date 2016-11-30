@@ -38,7 +38,7 @@ Gerrit有一个**非常**有用的工具叫[Git复检](https://www.mediawiki.org
 git clone ssh://LFID@gerrit.hyperledger.org:29418/fabric && scp -p -P 29418 LFID@gerrit.hyperledger.org:hooks/commit-msg fabric/.git/hooks/
 ```
 
-**注意:** 当你克隆fabric项目的时候，最好将其克隆到`$GOPATH/src/github.com/hyperledger` 目录下，这样你可以通过[文档](../dev-setup/devenv.md)的步骤使用Vagrant来使用它.
+**注意:** 当你克隆fabric项目的时候，最好将其克隆到`$GOPATH/src/github.com/hyperledger` 目录下，这样你可以通过[文档](../dev-setup/devenv.md)的步骤通过Vagrant来使用它.
 
 4. 为你的本地克隆创建一个具有描述性名称的分支
 
@@ -47,13 +47,13 @@ cd fabric
 git checkout -b issue-nnnn
 ```
 
-5. 提交你的代码，如何创建一个已经过深度讨论的高效提交格式，请仔细阅读[本文件](changes.md)。
+5. 提交你的代码，如何创建一个已经过深度讨论的高效提交格式，请仔细阅读[文档](changes.md)。
 ```
 git commit -s -a
 ```
 然后输入精确和可读性高的描述并提交。
 
-6. 当代码的变更影响文档和测试案，那么文档和测试案例的变更需要同代码一起提交，这样确保一旦代码变更被回滚，相应的文档和测试案例也被相应的回滚。
+6. 当代码的变更影响文档和测试案例，那么文档和测试案例的变更需要同代码一起提交，这样确保一旦代码变更被回滚，相应的文档和测试案例也被相应的回滚。
 
 ##提交变更
 
@@ -108,7 +108,7 @@ remote:
 To ssh://LFID@gerrit.hyperledger.org:29418/fabric
 * [new branch]      HEAD -> refs/for/master
 ```
-Gerrit将为你的推送创建一个连接，可以通过这个连接来查看此次推送的具体变更。
+Gerrit将为你的推送创建一个链接，可以通过这个链接来查看此次推送的具体变更。
 
 ## 增加复检者
 
