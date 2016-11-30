@@ -1,58 +1,43 @@
 # Submitting a Change to Gerrit
 
-请在提交改动之前阅读以下的要求，这个指南适用于刚开始接触开源项目的开发者，也适用于对开源项目经验丰富的开发者。
+请在提交变更之前阅读以下的指南，这个指南适用于刚开始接触开源项目的开发者，也适用于对开源项目经验丰富的开发者。
 
-##改动要求
+##变更要求
 
-This section contains guidelines for submitting code changes for review.
-For more information on how to submit a change using Gerrit, please
-see [Gerrit](gerrit.md).
+本节包含提交代码进行变更复检的指南，更多关于如何使用Gerrit提交变更，请访问[Gerrit](gerrit.md)。
 
-改动以git commit的方式提交，每个提交必须包含以下信息：
-- 一个少于72个字符的简短描述标题，紧接着一个空白行。
--一个改动逻辑或者改动原因的简单描述，紧接着一个空白行。
-- a Signed-off-by line, followed by a colon (Signed-off-by:)
-- a Change-Id identifier line, followed by a colon (Change-Id:). Gerrit won't
-  accept patches without this identifier.
+变更以git commit的方式提交，每个提交必须包含以下信息：
+- 少于72个字符的简短描述标题，紧接着一个空白行。
+- 变更逻辑或者变更原因的简单描述，紧接着一个空白行。
+- `Signed-off-by:`+ 姓名与邮箱  
+- `Change-Id:`+ Gerrit对此次提交产生的ID,如果没有这个ID，Gerrit不会接受此次提交。
 
-A commit with the above details is considered well-formed.
+带有上述细节的提交都被认为是结构良好的提交。
 
-All changes and topics sent to Gerrit must be well-formed. Informationally,
-`commit messages` must include:
+发送到Gerrit的所有变更和主题必须有良好的结构。提交信息的信息必须包括：
 
-* **what** the change does,
-* **why** you chose that approach, and
-* **how** you know it works -- for example, which tests you ran.
+* **什么** 变更了,
+* **为什么**你选择这样的方式，还有你是
+* **如何** 知道这么做是可行的，比如，你做了什么测试。
 
-Commits must [build cleanly](../dev-setup/build.md) when applied in top of each
-other, thus avoiding breaking bisectability. Each commit must address a single
-identifiable issue and must be logically self-contained.
+在任何一个版本上提交变更的所有提交都必须通过 [编译](../dev-setup/build.md)，以防止破坏系统的稳定性，每个提交必须只解决一个问题，而且在逻辑上是独立的。
 
-For example: One commit fixes whitespace issues, another renames a
-function and a third one changes the code's functionality.  An example commit
-file is illustrated below in detail:
-
+例如：一个修复空白问题、更改函数名和更改函数功能的提交，示例如下：
 ```
-A short description of your change with no period at the end
+此次变更的简短描述，在后面带有所解决问题的编号。
 
-You can add more details here in several paragraphs, but please keep each line
-width less than 80 characters. A bug fix should include the issue number.
+你可以在多个段落添加更多的细节，但请保持每行少于80个字符,对bug的修复必须带上bug编号。
 
 Fix Issue # 7050.
 
 Change-Id: IF7b6ac513b2eca5f2bab9728ebd8b7e504d3cebe1
 Signed-off-by: Your Name <commit-sender@email.address>
 ```
-Each commit must contain the following line at the bottom of the commit
-message:
+每个提交都必须在提交信息的底部包含以下信息：
 
 ```
 Signed-off-by: Your Name <your@email.address>
 ```
+在`Signed-off-by:`后面的名字和邮箱必须与本次提交的所有者一致，请确保`.git/confi`文件已经配置正确，总是通过Gerrit提交变更个it。
 
-The name in the Signed-off-by line and your email must match the change
-authorship information. Make sure your :file:`.git/config` is set up
-correctly. Always submit the full set of changes via Gerrit.
-
-When a change is included in the set to enable other changes, but it
-will not be part of the final set, please let the reviewers know this.
+当一个包含在本变更集里的变更是为了启用其他更改，但在最终确定时又并不是本变更集的一部分时，请让复检者知道这一点。

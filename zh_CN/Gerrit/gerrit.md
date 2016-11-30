@@ -5,11 +5,11 @@
 
 Gerrit 为用户分配了以下角:
 
-* **提交者**: 可提交修改改动，审查其他代码的改动，并分别投票+1或-1，作出接受或拒绝的建议。
-* **维护者**: 基于复检的反馈， 投以+2或-2来批准或拒绝改动。
+* **提交者**: 可提交修改变更，审查其他代码的变更，并分别投票+1或-1，作出接受或拒绝的建议。
+* **维护者**: 基于复检的反馈， 投以+2或-2来批准或拒绝变更。
 * **构建者**: (如Jenkins)可以使用构建自动化基础设施，以验证更改。
 
-维护者应熟悉[复检](reviewing.md)流程。也欢迎任何人来复检改动，以此来发现该改动文件的价值。
+维护者应熟悉[复检](reviewing.md)流程。也欢迎任何人来复检变更，以此来发现该变更文件的价值。
 
 ## Git复检
 
@@ -27,11 +27,11 @@ Gerrit有一个**非常**有用的工具叫[Git复检](https://www.mediawiki.org
 
 ##Gerrit存储库的本地克隆
 
-当你要做任何改动，实现新功能或者修复bug。
+当你要做任何变更，实现新功能或者修复bug。
 
 1. 打开 Gerrit中的 [项目页面](https://gerrit.hyperledger.org/r/#/admin/projects/)
 
-2. 选择你要改动的项目。
+2. 选择你要变更的项目。
 
 3. 打开一个命令终端，通过`Clone with git hook` URL将项目克隆到本地. 确保ssh也被选中，因为这将使认证更为简单。
 ```
@@ -53,11 +53,11 @@ git commit -s -a
 ```
 然后输入精确和可读性高的描述并提交。
 
-6. 当代码的改动影响文档和测试案，那么文档和测试案例的改动需要同代码一起提交，这样确保一旦代码改动被回滚，相应的文档和测试案例也被相应的回滚。
+6. 当代码的变更影响文档和测试案，那么文档和测试案例的变更需要同代码一起提交，这样确保一旦代码变更被回滚，相应的文档和测试案例也被相应的回滚。
 
-##提交改动
+##提交变更
 
-目前，只支持通过Gerrit来为项目提交改动给复检者复检，**请按照[指南](changes.md)的格式来修改并提交改动**
+目前，只支持通过Gerrit来为项目提交变更给复检者复检，**请按照[指南](changes.md)的格式来修改并提交变更**
 
 ### 使用git复检
 
@@ -71,7 +71,7 @@ git commit -s -a
     fetch = +refs/heads/*:refs/remotes/gerrit/*
 ```
 
-然后通过命令`git review`来提交你的改动。
+然后通过命令`git review`来提交你的变更。
 
 ```
 $ cd <your code dir>
@@ -84,7 +84,7 @@ $ git review
 
  可以根据[说明](../dev-setup/build.md)来编译构建源码。
 
-当改动可以提交时，要求将其推送到特定的分支上，其分支名包含了改动最终应该提交的目标分支信息
+当变更可以提交时，要求将其推送到特定的分支上，其分支名包含了变更最终应该提交的目标分支信息
 
  对Hyperledger Fabric项目来说，这个特定的分支名叫 `refs/for/master`。
 
@@ -108,11 +108,11 @@ remote:
 To ssh://LFID@gerrit.hyperledger.org:29418/fabric
 * [new branch]      HEAD -> refs/for/master
 ```
-Gerrit将为你的推送创建一个连接，可以通过这个连接来查看此次推送的具体改动。
+Gerrit将为你的推送创建一个连接，可以通过这个连接来查看此次推送的具体变更。
 
 ## 增加复检者
 
-你也可以为你的改动增加复检查。
+你也可以为你的变更增加复检查。
 
 你可以通过指令`%r=reviewer@project.org`来为你的提交增加复检者。  
 
@@ -131,29 +131,30 @@ git push origin HEAD:refs/for/master%r=rev1@email.com,r=rev2@notemail.com
 HEAD:refs/for/master%r=rev1@email.com,r=rev2@notemail.com`
 ```
 
-将 `@email.com` 和 `@notemail.com`换成复检者的邮箱地址，别忘了将`origin`替换成你的远程名（基本不用改动）
+将 `@email.com` 和 `@notemail.com`换成复检者的邮箱地址，别忘了将`origin`替换成你的远程名（基本不用变更）
 
 ##使用Gerrit复检
 
-* **添加（Add）**: 提交者可以通过这个按键来为自己的改动添加复检者，开始输入一个复检者名称时，系统将根据系统中已注册的用户信息自动为你补全用户名,系统将会通过邮件通知这些复检者。
+* **添加（Add）**: 提交者可以通过这个按键来为自己的变更添加复检者，开始输入一个复检者名称时，系统将根据系统中已注册的用户信息自动为你补全用户名,系统将会通过邮件通知这些复检者。
 
-* **丢弃（Abandon）**: 这个按键只有提交者可以使用，它允许提交者丢弃改动，并将改动从合并队列中删除。
+* **丢弃（Abandon）**: 这个按键只有提交者可以使用，它允许提交者丢弃变更，并将变更从合并队列中删除。
 
-* **Change-ID**: 这个ID是Gerrit创建的。如果在复检过程中发现你的提交需要作出修改时，它就变得特别有用。您可以提交的新版本; 如果提交的Change-ID提交，Gerrit会记住它并将其显示为相同的改动的另一个版本。
+* **Change-ID**: 这个ID是Gerrit创建的。如果在复检过程中发现你的提交需要作出修改时，它就变得特别有用。您可以提交的新版本; 如果提交的Change-ID提交，Gerrit会记住它并将其显示为相同的变更的另一个版本。
 
-* **状态（Status）**:现在这个改动示例就是在复检状态，在左上角有需要验证（Need Verified）的标志，列表中的复检者都会发表他们的建议，如果同意合并就投+1，如果不同意的就投-1，而Gerrit的维护者可以分别投以+2或-2来拒绝或接受合并。
+* **状态（Status）**:现在这个变更示例就是在复检状态，在左上角有需要验证（Need Verified）的标志，列表中的复检者都会发表他们的建议，如果同意合并就投+1，如果不同意的就投-1，而Gerrit的维护者可以分别投以+2或-2来拒绝或接受合并。
 
-系统将会发送通知到你提交信息里`Signed-off-by`行中的邮箱地址里。可以通过访问[Gerrit 面板](https://gerrit.hyperledger.org/r/#/dashboard/self)来查看请求的进度。
+系统将会发送通知到提交信息中`Signed-off-by`行中的邮箱地址里。可以通过访问[Gerrit 面板](https://gerrit.hyperledger.org/r/#/dashboard/self)来查看请求的进度。
 
 在Gerrit底部的历史标签下会显示所有复检者的意见。
 
-## 查看正在进行的改动
+## 查看正在进行的变更
 
-通过点击左上角 `All --> Changes` 或者[链接](https://gerrit.hyperledger.org/r/#/q/project:fabric)来查看所有正在进行的改动。
+通过点击左上角 `All --> Changes` 或者[链接](https://gerrit.hyperledger.org/r/#/q/project:fabric)来查看所有正在进行的变更。
 
 如果您在多个项目中进行协作开发，您可能希望通过左上角的搜索栏搜索添加过滤条件使其只显示特定的分支。
 
 添加过滤器*project:fabric*来使其只有Hyperledger Fabric的项目可视。
 
-通过点击 `My --> Changes` or [链接](https://gerrit.hyperledger.org/r/#/dashboard/self)，来列出你提交的所有改动，或列出那些需要你参与的改动。
+通过点击 `My --> Changes` or [链接](https://gerrit.hyperledger.org/r/#/dashboard/self)，来列出你提交的所有变更，或列出那些需要你参与的变更。
 
+信息
