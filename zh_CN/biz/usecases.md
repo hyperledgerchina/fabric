@@ -1,121 +1,122 @@
-# Canonical Use Cases
+#商业用例规范
 
 &nbsp;
 
-### B2B Contract
+### 企业间合约
 
-Business contracts can be codified to allow two or more parties to automate contractual agreements in a trusted way.  Although information on blockchain is naturally “public”, B2B contracts may require privacy control to protect sensitive business information from being disclosed to outside parties that also have access to the ledger.
+商业合约能够使涉及到两方或多方的协议合同以一种可信赖的方式自动执行。 尽管区块链上的信息被默认为“公开的”，商业合约也会提供隐私控制机制来保证企业间的敏感信息不会泄露给合约参与者以外的人员。
 
 
 <img src="../images/Canonical-Use-Cases_B2BContract.png" width="900" height="456">
 
-While confidential agreements are a key business case, there are many scenarios where contracts can and should be easily discoverable by all parties on a ledger. For example, a ledger used to create offers (asks) seeking bids, by definition, requires access without restriction. This type of contract may need to be standardized so that bidders can easily find them, effectively creating an electronic trading platform with smart contracts (aka chaincode).
+尽管保密协议是商业用例中的重要的一项，然而也有许多情况合约的内容需要对账本上的所有参与者可见。比如创建一个用来招标的账本，按照规定这个账本应被设计为无权限访问。这种合约需要被标准化以便竞标者可以轻松访问，并能有效通过智能合约（又名：链码）来创建电子贸易平台。
 
-#### Persona
+#### 角色
 
-*  Contract participant – Contract counter parties
+*  合约参与者 – 合约当事人
 
-*  Third party participant – A third party stakeholder guaranteeing the integrity of the contract.
+*  第三方参与者 – 第三方利益相关者，来保证合约的信誉.
 
-#### Key Components
+#### 重要性质
 
-*  Multi-sig contract activation - When a contract is first deployed by one of the counter parties, it will be in the pending activation state. To activate a contract, signatures from other counterparties and/or third party participants are required.
+*  多方签名激活合约 - 当合约首次由某一方合约当事人部署到账本上时，合约会处于等待激活状态。若要激活合约，需要所有其他合约当事人方以及（或者）第三方参与者的签名。
 
-*  Multi-sig contract execution - Some contracts will require one of many signatures to execute. For example, in trade finance, a payment instruction can only be executed if either the recipient or an authorized third party (e.g. UPS) confirms the shipment of the good.
+*  多方签名执行合约 - 某些合约在执行时也需要一方或多方签名。比如在贸易金融中，只有当收货人或第三方（如快递公司）确认发货之后，付款指令才会被执行。
 
-*  Discoverability - If a contract is a business offer seeking bids, it must be easily searchable. In addition, such contracts must have the built-in intelligence to evaluate, select and honor bids.
+*  可发现性 - 如果合约的内容是关于商业招标，这个合约必须易于查找。另外，这样的合约也必须内置评估，选择和调节竞价的机制。 
 
-*  Atomicity of contract execution - Atomicity of the contract is needed to guarantee that asset transfers can only occur when payment is received (Delivery vs. Payment). If any step in the execution process fails, the entire transaction must be rolled back.
+*  合约分块执行 - 合约分块执行可以保证仅有在货款到账的情况下才会进行货物转移（运送vs支付）. 如果交易过程中任意一个步骤出现问题，交易必须终止并返回交易前状态。 
 
-*  Contract to chain-code communication - Contracts must be able to communicate with chaincodes that are deployed on the same ledger.
+*  合约与链码间通信 - 合约必须能够和部署在同一个账本上的链码进行通信。
 
-*  Longer Duration contract - Timer is required to support B2B contracts that have long execution windows.
+*  更长时间有效的合约 - 企业间合约由于执行时间较长，则需要引入计时器来记录用时。
 
-*  Reuseable contracts - Often-used contracts can be standardized for reuse.
+*  可复用合约 - 对常用合约进行标准化以便反复使用。
 
-*  Auditable contractual agreement - Any contract can be made auditable to third parties.
+*  可审计的合同协议 - 任何合约都应设定为可以被第三方审计。
 
-*  Contract life-cycle management - B2B contracts are unique and cannot always be standardized. An efficient contract management system is needed to enhance the scalability of the ledger network.
+*  合约生命周期管理 - 企业间合约都是专有的，不可能把所有的合约都标准化。因此一个有效的合约管理系统就尤为重要，该系统可以用来提升账本网络的规模。
 
-*  Validation access – Only nodes with validation rights are allowed to validate transactions of a B2B contract.
+*  验证权限 – 只有拥有验证权限的节点才可以验证企业间合约的交易。
 
-*  View access – B2B contracts may include confidential information, so only accounts with predefined access rights are allowed to view and interrogate them.
+*  查看权限 – 企业间合约也会包含保密信息，只有被授与查看权限的账户才能查看和质询这些信息。
 
 &nbsp;
 
 
-### Manufacturing Supply Chain
+### 制造商供应链
 
-Final assemblers, such as automobile manufacturers, can create a supply chain network managed by its peers and suppliers so that a final assembler can better manage its suppliers and be more responsive to events that would require vehicle recalls (possibly triggered by faulty parts provided by a supplier). The blockchain fabric must provide a standard protocol to allow every participant on a supply chain network to input and track numbered parts that are produced and used on a specific vehicle.
+对于一个处在供应链终端的装配企业来说，比如汽车制造商，它可以创建一个由它的同行们和供应商共同维护的供应链网络。这样汽车制造商就能更好地管理它的供应商也能更好的应对汽车召回这样的事件（这类事件通常因为供应商提供了不合规格的零件而引发）。fabric的区块链必须提供标准的协议来确保供应链网络上的每个参与者都能写入或追踪任意一辆汽车上的任意部件。
 
-Why is this specific example an abstract use case? Because while all blockchain cases store immutable information, and some add the need for transfer of assets between parties, this case emphasizes the need to provide deep searchability backwards through as many as 5-10 transaction layers. This backwards search capability is the core of establishing provenance of any manufactured good that is made up of other component goods and supplies.
+为什么我们把这个合约用例单独列出来呢? 因为尽管所有区块链主要用来存储不可更改的信息，然而有些区块链应用具有实现在不同实体间转移财物的需求。本例就特别指出深度逆向搜索交易的需求，有时甚至需要搜索5到10层历史交易。在供应链中如果许多成品都是由其他部件装配而成，而这种逆向追踪搜索的能力就能找出一个成品所有部件的原产地。
 
 <img src="../images/Canonical-Use-Cases_Manufacturing-Supply-Chain.png" width="900" height="552">
 
-#### Persona
+#### 角色
 
-*  Final Assembler – The business entity that performs the final assembly of a product.
+*  终端装配企业 – 供应链终端把零部件装配成最终成品的企业。
 
-*  Part supplier – Supplier of parts. Suppliers can also be assemblers by assembling parts that they receive from their  sub-suppliers, and then sending their finished product to the final (root) assembler.
+*  部件供应商 – 供应零部件的供应商。 供应商也会把下级供应商提供的更零散的部件装配成其他部件或成品，然后提供给终端装配企业。
 
-#### Key Components
+#### 重要部分
 
-*  Payment upon delivery of goods - Integration with off-chain payment systems is required, so that payment instructions can be sent when parts are received.
+*  货到后付款 - 需要继承链外支付系统，区块链可以保证当部件送达后再执行支付指令。
 
-*  Third party Audit -  All supplied parts must be auditable by third parties. For example, regulators might need to track the total number of parts supplied by a specific supplier, for tax accounting purposes.
+*  第三方审计 -  所有的部件必须对第三方开发审计验收。比如，监管者可能需要追踪某一部件供应商供应的部件的总数，为了税务方面原因。
 
-*  Obfuscation of shipments - Balances must be obfuscated so that no supplier can deduce the business activities of any other supplier.
+*  发货过程不可见 - 发货结算数额必须设为不可见否则供应商可以借此推测出同行的商业活动信息。
 
-*  Obfuscation of market size - Total balances must be obfuscated so that part suppliers cannot deduce their own market share to use as leverage when negotiating contractual terms.
+*  市场规模不可见 - 结算数额总数不许设为不可见否则供应商可以借此推测出自己所占的市场份额，由此可能引发制定合约条款时非公正竞争。
 
-*  Validation Access – Only nodes with validation rights are allowed to validate transactions (shipment of parts).
+*  验证权限 – 只有拥有验证权限的节点才可以验证交易（部件发货）。
 
-*  View access – Only accounts with view access rights are allowed to interrogate balances of shipped parts and available parts.
+*  查看权限 – 只有被授与查看权限的账户才能质询运送的部件以及可用部件的结算数额。
 
 &nbsp;
 
 
-### Asset Depository
+### 财产保管
 
-Assets such as financial securities must be able to be dematerialized on a blockchain network so that all stakeholders of an asset type will have direct access to that asset, allowing them to initiate trades and acquire information on an asset without going through layers of intermediaries. Trades should be settled in near real time and all stakeholders must be able to access asset information in near real time. A stakeholder should be able to add business rules on any given asset type, as one example of using automation logic to further reduce operating costs.
+像金融证券这样的财产必须以非实质的形态存在区块链网络上，这样某种特定财产的持有者们就可以通过区块链直接访问这些的财产、发起交易或查询信息，而不再需要聘请律师来作为中间媒介。财产的交易应当近实时完成同时其他财产持有者必须能够近实时访问到该交易信息。 一个财产持有者应该能够根据财产类型添加商业条例，比如可以使用自动执行逻辑来进一步降低操作花销。
+
 <img src="../images/Canonical-Use-Cases_Asset-Depository.png" width="900" height="464">
 
-#### Persona
+#### 角色
 
-*  Investor – Beneficial and legal owner of an asset.
+*  证券持有者 – 该财产的合法拥有者和受益者。
 
-*  Issuer – Business entity that issued the asset which is now dematerialized on the ledger network.
+*  证券发行者 – 发行财产的商业实体，财产以非实质的形式存储在区块链网络上。
 
-*  Custodian – Hired by investors to manage their assets, and offer other value-add services on top of the assets being managed.
+*  托管人 – 受证券持有者的雇佣来管理他们的财产,在管理财产同时也会提供其他增值服务。
 
-*  Securities Depository – Depository of dematerialized assets.
+*  证券保管机构 – 非实质化的财产的存储处。
 
-#### Key Components
+#### 重要部分
 
-*  Asset to cash - Integration with off-chain payment systems is necessary so that issuers can make payments to and receive payments from investors.
+*  财产现金转换 - 很有必要添加链外支付系统以便证券发行者能从证券持有者手中收款。 
 
-*  Reference Rate - Some types of assets (such as floating rate notes) may have attributes linked to external data (such as  reference rate), and such information must be fed into the ledger network.
+*  参考利率 - 某些特殊种类的财产（比如浮动利率票据）可能会具有一些属性需要用到外部数据（如参考利率）, 这些数据也必须添加到账本网络上。
 
-*  Asset Timer - Many types of financial assets have predefined life spans and are required to make periodic payments to their owners, so a timer is required to automate the operation management of these assets.
+*  财产计时器 - 许多种类的金融财产都有自己的生命周期同时也可能需要周期性向财产持有者付款， 因此要自动执行管理财产的操作，添加计时器是很有必要的。
 
-*  Asset Auditor - Asset transactions must be made auditable to third parties. For example, regulators may want to audit transactions and movements of assets to measure market risks.
+*  财产审计员 - 财产的交易必须能有被第三方审计。 比如监管部门要通过审计财产交易和转移来评估市场风险。
 
-*  Obfuscation of account balances - Individual account balances must be obfuscated so that no one can deduce the exact amount that an investor owns.
+*  账户余额不可见 - 每个人的账户余额必须是不可见的，这样他人就不能通过余额来推测证券持有者持有财产的数量。
 
-*  Validation Access – Only nodes with validation rights are allowed to validate transactions that update the balances of an asset type (this could be restricted to CSD and/or the issuer).
+*  验证权限 –  只有拥有验证权限的节点才可以验证涉及到更新财产余额是交易。（这些节点控制权可以限制在中央证券托管机构和（或）债券发行者中）.
 
-*  View access – Only accounts with view access rights are allowed to interrogate the chaincode that defines an asset type. If an asset represents shares of publicly traded companies, then the view access right must be granted to every entity on the network.
+*  查看权限 – 只有被授与查看权限的账户才能查看和质询定义财产类型的链码。 如果该财产表示的是公开上市交易公司的股份的话，查看权限应当授予网络中的所有参与实体。
 
 &nbsp;
 
 
-# Extended Use Cases
+# 扩展用例
 
-The following extended use cases examine additional requirements and scenarios.
+如下列出的扩展用例为检测附加需求和场景。
 
-### One Trade, One Contract
+### 一场交易中使用同一个合约
 
-From the time that a trade is captured by the front office until the trade is finally settled, only one contract that specifies the trade will be created and used by all participants. The middle office will enrich the same electronic contract submitted by the front office, and that same contract will then be used by counter parties to confirm and affirm the trade. Finally, securities depository will settle the trade by executing the trading instructions specified on the contract. When dealing with bulk trades, the original contract can be broken down into sub-contracts that are always linked to the original parent contract.
+从一起交易抵达前台部门起知道这起交易最终完成,交易中所有的参与人员都会使用同一个写明了交易细则的合约。 中间部门会丰富前台部门提交的电子合约的内容，同样交易的另一方也在使用同一个合约来确认交易。 最后，证券保管机构通过执行合约中的交易指令来完成交易。 当处理多起交易时，最初的合约可以分解成多个下级合约，每个下级合约都会连接到最初的合约。 
 
 <img src="../images/Canonical-Use-Cases_One-Trade-One-Contract.png" width="900" height="624">
 
@@ -123,22 +124,24 @@ From the time that a trade is captured by the front office until the trade is fi
 
 ### Direct Communication
 
-Company A announces its intention to raise 2 Billion USD by way of rights issue. Because this is a voluntary action, Company A needs to ensure that complete details of the offer are sent to shareholders in real time, regardless of how many intermediaries are involved in the process (such as receiving/paying agents, CSD, ICSD, local/global custodian banks, asset management firms, etc). Once a shareholder has made a decision, that decision will also be processed and settled (including the new issuance of shares) in real time. If a shareholder sold its rights to a third party, the securities depository must be able to record the new shares under the name of their new rightful owner.
+A公司宣布他们公司计划通过股权发行的方式集资20亿美元。由于这属于有目标的有意行为，A公司必须必须保证这个提议的全部细节都能实时送到股东手中，不管这个过程中涉及到多少中间机构（如收款付款代理，中央证券托管机构，国际中央证券托管机构，本地或全球的托管银行，财产管理公司等）。一旦某个股东做出了决定，这个决定将会被实时处理（包括发行新股份）。 如果某个股东把他持有的股权转让给了第三方，证券保管机构必须能够把这些新股权记录在新的持有者名下。
 
 <img src="../images/Canonical-Use-Cases_Direct-Communication.png" width="900" height="416">
 
 &nbsp;
 
-### Separation of Asset Ownership and Custodian’s Duties
+### 财产所有权的分离和委托人的职责
 
-Assets should always be owned by their actual owners, and asset owners must be able to allow third-party professionals to manage their assets without having to pass legal ownership of assets to third parties (such as nominee or street name entities). If issuers need to send messages or payments to asset owners (for example, listed share holders), issuers send them directly to asset owners. Third-party asset managers and/or custodians can always buy, sell, and lend assets on behalf of their owners. Under this arrangement, asset custodians can focus on providing value-add services to shareowners, without worrying about asset ownership duties such as managing and redirecting payments from issuers to shareowners.
+财产应当永远属于它的真正所有者，而财产所有者必须能够在不转让财产所有权的情况下，让第三方的专业人员（如存管代理人）帮助他们管理财产。如果证券发行者想向财产拥有者发送消息（比如发送股东名单）或者汇款，发行者就需要直接发送给财产所有人。第三方财产管理或托管机构总是能够代表财产所有者进行财产的买卖及租赁。通过这样的安排，财产托管人可以专注于为股份持有者提供资产增值服务，而不用关心股权相关的责任，比如证券持有者和股东之间付款的管理和重定向问题等。
+
 
 <img src="../images/Canonical-Use-Cases_Separation-of-Asset-Ownership-and-Custodians-Duties.png" width="900" height="628">
 
 &nbsp;
 
-### Interoperability of Assets
+### 财产间的相互操作性
 
-If an organization requires 20,000 units of asset B, but instead owns 10,000 units of asset A, it needs a way to exchange asset A for asset B. Though the current market might not offer enough liquidity to fulfill this trade quickly, there might be plenty of liquidity available between asset A and asset C, and also between asset C and asset B. Instead of settling for market limits on direct trading (A for B) in this case, a chain network connects buyers with "buried" sellers, finds the best match (which could be buried under several layers of assets), and executes the transaction.
+如果某个机构需要20000个单位的B财产，同时它却拥有者10000个单位的A财产，那它就需要想出个办法吧A财产转换成B财产。尽管当前的市场并不能提供足够的资产流动性来满足这笔交易，但A财产和C财产，C财产和B财产之间却有着足够的可用流动性。与其想办法解决A财产和B财产之间的市场紧缺问题，区块链网络可以帮买家联系潜在的卖家（可能几次财产转化之后），匹配到最合适的卖家并执行交易。
+
 
 <img src="../images/Canonical-Use-Cases_Interoperability-of-Assets.png" width="900" height="480">
