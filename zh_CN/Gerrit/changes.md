@@ -1,21 +1,16 @@
 # Submitting a Change to Gerrit
 
-Carefully review the following before submitting a change. These
-guidelines apply to developers that are new to open source, as well as
-to experienced open source developers.
+请在提交改动之前阅读以下的要求，这个指南适用于刚开始接触开源项目的开发者，也适用于对开源项目经验丰富的开发者。
 
-## Change Requirements
+##改动要求
 
 This section contains guidelines for submitting code changes for review.
 For more information on how to submit a change using Gerrit, please
 see [Gerrit](gerrit.md).
 
-Changes are submitted as Git commits. Each commit must contain:
-
-- a short and descriptive subject line that is 72 characters or fewer,
-  followed by a blank line.
-- a change description with your logic or reasoning for the changes,
-  followed by a blank line
+改动以git commit的方式提交，每个提交必须包含以下信息：
+- 一个少于72个字符的简短描述标题，紧接着一个空白行。
+-一个改动逻辑或者改动原因的简单描述，紧接着一个空白行。
 - a Signed-off-by line, followed by a colon (Signed-off-by:)
 - a Change-Id identifier line, followed by a colon (Change-Id:). Gerrit won't
   accept patches without this identifier.

@@ -1,102 +1,69 @@
-# Working with Gerrit
+# 使用Gerrit
+根据以下指令，通过Gerrit复检系统，你可以与其它开发者对Hyperledger Fabric项目与进行协作开发。
 
-Follow these instructions to collaborate on the Hyperledger Fabric Project
-through the Gerrit review system.
+请确保你订阅了[邮件列表](http://lists.hyperledger.org/mailman/listinfo/hyperledger-fabric)，如果有任何问题，你也可以通过 [Slack](https://hyperledgerproject.slack.com/)寻求帮助。
 
-Please be sure that you are subscribed to the [mailing
-list](http://lists.hyperledger.org/mailman/listinfo/hyperledger-fabric) and of
-course, you can reach out on [Slack](https://hyperledgerproject.slack.com/) if
-you need help.
+Gerrit 为用户分配了以下角:
 
-Gerrit assigns the following roles to users:
+* **提交者**: 可提交修改改动，审查其他代码的改动，并分别投票+1或-1，作出接受或拒绝的建议。
+* **维护者**: 基于复检的反馈， 投以+2或-2来批准或拒绝改动。
+* **构建者**: (如Jenkins)可以使用构建自动化基础设施，以验证更改。
 
-* **Submitters**: May submit changes for consideration, review other code
-  changes, and make recommendations for acceptance or rejection by voting
-  +1 or -1, respectively.
-* **Maintainers**: May approve or reject changes based upon feedback from
-  reviewers voting +2 or -2, respectively.
-* **Builders**: (e.g. Jenkins) May use the build automation infrastructure to
-  verify the change.
+维护者应熟悉[复检](reviewing.md)流程。也欢迎任何人来复检改动，以此来发现该改动文件的价值。
 
-Maintainers should be familiar with the [review process](reviewing.md). However,
-anyone is welcome to (and encouraged!) review changes, and hence may find that
-document of value.
+## Git复检
 
-## Git-review
+Gerrit有一个**非常**有用的工具叫[Git复检](https://www.mediawiki.org/wiki/Gerrit/git-review)。
+这个命令行工具可以为你自动完成大部分的工作，建议阅读下面的内容，这样可以让你明白这些工作背后的工作原理。
 
-There's a **very** useful tool for working with Gerrit called
-[git-review](https://www.mediawiki.org/wiki/Gerrit/git-review). This
-command-line tool can automate most of the ensuing sections for you. Of course,
-reading the information below is also highly recommended so that you understand
-what's going on behind the scenes.
 
-## Sandbox project
+## 示例项目
 
-We have created a [sandbox
-project](https://gerrit.hyperledger.org/r/#/admin/projects/lf-sandbox) to allow
-developers to familiarize themselves with Gerrit and our workflows. Please do
-feel free to use this project to experiment with the commands and tools, below.
+我们创建了一个[示例项目](https://gerrit.hyperledger.org/r/#/admin/projects/lf-sandbox)来让开发者熟悉Gerrit和我们的工作流程，你可以通过下面的命令和工具来练习。
 
-## Getting deeper into Gerrit
+## 深入了解Gerrit
 
-A comprehensive walk-through of Gerrit is beyond the scope of this document.
-There are plenty of resources available on the Internet. A good summary can be
-found [here](https://www.mediawiki.org/wiki/Gerrit/Tutorial). We have also
-provided a set of [Best Practices](best-practices.md) that you may find helpful.
+全面介绍Gerrit不在此文档的范围之内，互联网上有许多相关的资源，你可以在[这里](https://www.mediawiki.org/wiki/Gerrit/Tutorial)找到一个很好的简介，我们提供的一系列[最佳实践](best-practices.md)可能也会对你有帮助。
 
-## Working with a local clone of the repository
+##Gerrit存储库的本地克隆
 
-To work on something, whether a new feature or a bugfix:
+当你要做任何改动，实现新功能或者修复bug。
 
-1. Open the Gerrit [Projects page](https://gerrit.hyperledger.org/r/#/admin/projects/)
+1. 打开 Gerrit中的 [项目页面](https://gerrit.hyperledger.org/r/#/admin/projects/)
 
-2. Select the project you wish to work on.
+2. 选择你要改动的项目。
 
-3. Open a terminal window and clone the project locally using the `Clone with git
-hook` URL. Be sure that `ssh` is also selected, as this will make authentication
-much simpler:
+3. 打开一个命令终端，通过`Clone with git hook` URL将项目克隆到本地. 确保ssh也被选中，因为这将使认证更为简单。
 ```
 git clone ssh://LFID@gerrit.hyperledger.org:29418/fabric && scp -p -P 29418 LFID@gerrit.hyperledger.org:hooks/commit-msg fabric/.git/hooks/
 ```
 
-**Note:** if you are cloning the fabric project repository, you will want to
-clone it to the `$GOPATH/src/github.com/hyperledger` directory so that it will
-build, and so that you can use it with the Vagrant [development
-environment](../dev-setup/devenv.md).
+**注意:** 当你克隆fabric项目的时候，最好将其克隆到`$GOPATH/src/github.com/hyperledger` 目录下，这样你可以通过[文档](../dev-setup/devenv.md)的步骤使用Vagrant来使用它.
 
-4. Create a descriptively-named branch off of your cloned repository
+4. 为你的本地克隆创建一个具有描述性名称的分支
 
 ```
 cd fabric
 git checkout -b issue-nnnn
 ```
 
-5. Commit your code. For an in-depth discussion of creating an effective commit,
-please read [this document](changes.md).
-
+5. 提交你的代码，如何创建一个已经过深度讨论的高效提交格式，请仔细阅读[本文件](changes.md)。
 ```
 git commit -s -a
 ```
+然后输入精确和可读性高的描述并提交。
 
-Then input precise and readable commit msg and submit.
+6. 当代码的改动影响文档和测试案，那么文档和测试案例的改动需要同代码一起提交，这样确保一旦代码改动被回滚，相应的文档和测试案例也被相应的回滚。
 
-6. Any code changes that affect documentation should be accompanied by
-corresponding changes (or additions) to the documentation and tests. This
-will ensure that if the merged PR is reversed, all traces of the change will
-be reversed as well.
+##提交改动
 
-## Submitting a Change
+目前，只支持通过Gerrit来为项目提交改动给复检者复检，**请按照[指南](changes.md)的格式来修改并提交改动**
 
-Currently, Gerrit is the only method to submit a change for review. **Please review
-the [guidelines](changes.md) for making and submitting a change**.
+### 使用git复检
 
-### Use git review
+**注意:**如果你喜欢，你可以使用 [git复检](#Git复检)来代替以下的例子。
 
-**Note:** if you prefer, you can use the [git-review](#git-review) tool instead
-of the following. e.g.
-
-Add the following section to `.git/config`, and replace `<USERNAME>` with your 
-gerrit id.
+复制以下的设置到 `.git/config`，将`<USERNAME>`替换成你的Gerrit帐号。
 
 ```
 [remote "gerrit"]
@@ -104,35 +71,30 @@ gerrit id.
     fetch = +refs/heads/*:refs/remotes/gerrit/*
 ```
 
-Then submit your change with `git review`.
+然后通过命令`git review`来提交你的改动。
 
 ```
 $ cd <your code dir>
 $ git review
 ```
+当你更新了你的补丁，你可以通过`git commit --amend`命令再次提交，然后重复 `git review`命令。
 
-When you update your patch, you can commit with `git commit --amend`, and then 
-repeat the `git review` command.
 
-### Not Use git review
+### 不使用git复检
 
-Directions for building the source code can be found [here](../dev-setup/build.md).
+ 可以根据[说明](../dev-setup/build.md)来编译构建源码。
 
-When a change is ready for submission, Gerrit requires that the
-change be pushed to a special branch. The name of this special branch
-contains a reference to the final branch where the code should reside,
-once accepted.
+当改动可以提交时，要求将其推送到特定的分支上，其分支名包含了改动最终应该提交的目标分支信息
 
-For the Hyperledger Fabric Project, the special branch is called `refs/for/master`.
+ 对Hyperledger Fabric项目来说，这个特定的分支名叫 `refs/for/master`。
 
-To push the current local development branch to the gerrit server, open a
-terminal window at the root of your cloned repository:
+当要将本地的开发分支推送到Gerrit服务器时，在克隆项目的根目录下，打开一个终端并执行以下命令。
 
 ```
 cd <your clone dir>
 git push origin HEAD:refs/for/master
 ```
-If the command executes correctly, the output should look similar to this:
+如果你的命令执行正确，将会有类似以下的输出。
 
 ```
 Counting objects: 3, done.
@@ -146,73 +108,52 @@ remote:
 To ssh://LFID@gerrit.hyperledger.org:29418/fabric
 * [new branch]      HEAD -> refs/for/master
 ```
+Gerrit将为你的推送创建一个连接，可以通过这个连接来查看此次推送的具体改动。
 
-The gerrit server generates a link where the change can be tracked.
+## 增加复检者
 
-## Adding reviewers
+你也可以为你的改动增加复检查。
 
-Optionally, you can add reviewers to your change.
+你可以通过指令`%r=reviewer@project.org`来为你的提交增加复检者。  
 
-To specify a list of reviewers via the command line, add
-`%r=reviewer@project.org` to your push command. For example:
+比如：
 
 ```
 git push origin HEAD:refs/for/master%r=rev1@email.com,r=rev2@notemail.com
 ```
-   Alternatively, you can auto-configure GIT to add a set of reviewers if your
-   commits will have the same reviewers all at the time.
 
-   To add a list of default reviewers, open the :file:`.git/config` file in the
-   project directory and add the following line in the `[ branch “master” ]`
-   section:
+另外，如果你所有提交的复检者都是相同的,还可以通过git配置添加一组复检者。
+
+要添加默认复检者，打开文件`.git/config`，在`[ branch “master” ]`下添加以下配置：
 
 ```
 [branch "master"] #.... push =
 HEAD:refs/for/master%r=rev1@email.com,r=rev2@notemail.com`
 ```
 
-Make sure to use actual email addresses instead of the `@email.com and @notemail.com`
-addressses. Don't forget to replace `origin` with your git remote name.
+将 `@email.com` 和 `@notemail.com`换成复检者的邮箱地址，别忘了将`origin`替换成你的远程名（基本不用改动）
 
-## Reviewing Using Gerrit
+##使用Gerrit复检
 
-* **Add**: This button allows the change submitter to manually add names of
-  people who should review a change; start typing a name and the system
-  will auto-complete based on the list of people registered and with
-  access to the system. They will be notified by email that you are
-  requesting their input.
+* **添加（Add）**: 提交者可以通过这个按键来为自己的改动添加复检者，开始输入一个复检者名称时，系统将根据系统中已注册的用户信息自动为你补全用户名,系统将会通过邮件通知这些复检者。
 
-* **Abandon**: This button is available to the submitter only; it allows a
-  committer to abandon a change and remove it from the merge queue.
+* **丢弃（Abandon）**: 这个按键只有提交者可以使用，它允许提交者丢弃改动，并将改动从合并队列中删除。
 
-* **Change-ID**: This ID is generated by Gerrit (or system). It becomes
-  useful when the review process determines that your commit(s) have to
-  be amended. You may submit a new version; and if the same Change-ID
-  header (and value) are present, Gerrit will remember it and present
-  it as another version of the same change.
+* **Change-ID**: 这个ID是Gerrit创建的。如果在复检过程中发现你的提交需要作出修改时，它就变得特别有用。您可以提交的新版本; 如果提交的Change-ID提交，Gerrit会记住它并将其显示为相同的改动的另一个版本。
 
-* **Status**: Currently, the example change is in review status, as indicated
-  by “Needs Verified” in the upper-left corner. The list of
-  Reviewers will all emit their opinion, voting +1 if they agree to the
-  merge, -1 if they disagree. Gerrit users with a Maintainer role can
-  agree to the merge or refuse it by voting +2 or -2 respectively.
+* **状态（Status）**:现在这个改动示例就是在复检状态，在左上角有需要验证（Need Verified）的标志，列表中的复检者都会发表他们的建议，如果同意合并就投+1，如果不同意的就投-1，而Gerrit的维护者可以分别投以+2或-2来拒绝或接受合并。
 
-Notifications are sent to the email address in your commit message's
-Signed-off-by line. Visit your [Gerrit dashboard](https://gerrit.hyperledger.org/r/#/dashboard/self), to check the progress of your requests.
+系统将会发送通知到你提交信息里`Signed-off-by`行中的邮箱地址里。可以通过访问[Gerrit 面板](https://gerrit.hyperledger.org/r/#/dashboard/self)来查看请求的进度。
 
-The history tab in Gerrit will show you the in-line comments and the author of
-the review.
+在Gerrit底部的历史标签下会显示所有复检者的意见。
 
-## Viewing Pending Changes
+## 查看正在进行的改动
 
-Find all pending changes by clicking on the `All --> Changes` link in the
-upper-left corner, or [open this link](https://gerrit.hyperledger.org/r/#/q/project:fabric).
+通过点击左上角 `All --> Changes` 或者[链接](https://gerrit.hyperledger.org/r/#/q/project:fabric)来查看所有正在进行的改动。
 
-If you collaborate in multiple projects, you may wish to limit searching to
-the specific branch through the search bar in the upper-right side.
+如果您在多个项目中进行协作开发，您可能希望通过左上角的搜索栏搜索添加过滤条件使其只显示特定的分支。
 
-Add the filter *project:fabric* to limit the visible changes to
-only those from the Hyperledger Fabric Project.
+添加过滤器*project:fabric*来使其只有Hyperledger Fabric的项目可视。
 
-List all current changes you submitted, or list just those changes in need
-of your input by clicking on `My --> Changes` or [open this link](https://gerrit.hyperledger.org/r/#/dashboard/self)
+通过点击 `My --> Changes` or [链接](https://gerrit.hyperledger.org/r/#/dashboard/self)，来列出你提交的所有改动，或列出那些需要你参与的改动。
+
