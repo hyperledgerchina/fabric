@@ -75,47 +75,48 @@
 &nbsp;
 
 
-### Asset Depository
+### 财产保管
 
-Assets such as financial securities must be able to be dematerialized on a blockchain network so that all stakeholders of an asset type will have direct access to that asset, allowing them to initiate trades and acquire information on an asset without going through layers of intermediaries. Trades should be settled in near real time and all stakeholders must be able to access asset information in near real time. A stakeholder should be able to add business rules on any given asset type, as one example of using automation logic to further reduce operating costs.
+像金融证券这样的财产必须以非实质的形态存在区块链网络上，这样某种特定财产的持有者们就可以通过区块链直接访问这些的财产、发起交易或查询信息，而不再需要聘请律师来作为中间媒介。财产的交易应当近实时完成同时其他财产持有者必须能够近实时访问到该交易信息。 一个财产持有者应该能够根据财产类型添加商业条例，比如可以使用自动执行逻辑来进一步降低操作花销。
+
 <img src="../images/Canonical-Use-Cases_Asset-Depository.png" width="900" height="464">
 
 #### 角色
 
-*  Investor – Beneficial and legal owner of an asset.
+*  证券持有者 – 该财产的合法拥有者和受益者。
 
-*  Issuer – Business entity that issued the asset which is now dematerialized on the ledger network.
+*  证券发行者 – 发行财产的商业实体，财产以非实质的形式存储在区块链网络上。
 
-*  Custodian – Hired by investors to manage their assets, and offer other value-add services on top of the assets being managed.
+*  托管人 – 受证券持有者的雇佣来管理他们的财产,在管理财产同时也会提供其他增值服务。
 
-*  Securities Depository – Depository of dematerialized assets.
+*  证券保管机构 – 非实质化的财产的存储处。
 
 #### 重要部分
 
-*  Asset to cash - Integration with off-chain payment systems is necessary so that issuers can make payments to and receive payments from investors.
+*  财产现金转换 - 很有必要添加链外支付系统以便证券发行者能从证券持有者手中收款。 
 
-*  Reference Rate - Some types of assets (such as floating rate notes) may have attributes linked to external data (such as  reference rate), and such information must be fed into the ledger network.
+*  参考利率 - 某些特殊种类的财产（比如浮动利率票据）可能会具有一些属性需要用到外部数据（如参考利率）, 这些数据也必须添加到账本网络上。
 
-*  Asset Timer - Many types of financial assets have predefined life spans and are required to make periodic payments to their owners, so a timer is required to automate the operation management of these assets.
+*  财产计时器 - 许多种类的金融财产都有自己的生命周期同时也可能需要周期性向财产持有者付款， 因此要自动执行管理财产的操作，添加计时器是很有必要的。
 
-*  Asset Auditor - Asset transactions must be made auditable to third parties. For example, regulators may want to audit transactions and movements of assets to measure market risks.
+*  财产审计员 - 财产的交易必须能有被第三方审计。 比如监管部门要通过审计财产交易和转移来评估市场风险。
 
-*  Obfuscation of account balances - Individual account balances must be obfuscated so that no one can deduce the exact amount that an investor owns.
+*  账户余额不可见 - 每个人的账户余额必须是不可见的，这样他人就不能通过余额来推测证券持有者持有财产的数量。
 
-*  Validation Access – Only nodes with validation rights are allowed to validate transactions that update the balances of an asset type (this could be restricted to CSD and/or the issuer).
+*  验证权限 –  只有拥有验证权限的节点才可以验证涉及到更新财产余额是交易。（这些节点控制权可以限制在中央证券托管机构和（或）债券发行者中）.
 
-*  View access – Only accounts with view access rights are allowed to interrogate the chaincode that defines an asset type. If an asset represents shares of publicly traded companies, then the view access right must be granted to every entity on the network.
+*  查看权限 – 只有被授与查看权限的账户才能查看和质询定义财产类型的链码。 如果该财产表示的是公开上市交易公司的股份的话，查看权限应当授予网络中的所有参与实体。
 
 &nbsp;
 
 
-# Extended Use Cases
+# 扩展用例
 
-The following extended use cases examine additional requirements and scenarios.
+如下列出的扩展用例为检测附加需求和场景。
 
-### One Trade, One Contract
+### 一场交易中使用同一个合约
 
-From the time that a trade is captured by the front office until the trade is finally settled, only one contract that specifies the trade will be created and used by all participants. The middle office will enrich the same electronic contract submitted by the front office, and that same contract will then be used by counter parties to confirm and affirm the trade. Finally, securities depository will settle the trade by executing the trading instructions specified on the contract. When dealing with bulk trades, the original contract can be broken down into sub-contracts that are always linked to the original parent contract.
+从一起交易抵达前台部门起知道这起交易最终完成,交易中所有的参与人员都会使用同一个写明了交易细则的合约。 中间部门会丰富前台部门提交的电子合约的内容，同样交易的另一方也在使用同一个合约来确认交易。 最后，证券保管机构通过执行合约中的交易指令来完成交易。 当处理多起交易时，最初的合约可以分解成多个下级合约，每个下级合约都会连接到最初的合约。 
 
 <img src="../images/Canonical-Use-Cases_One-Trade-One-Contract.png" width="900" height="624">
 
@@ -123,22 +124,24 @@ From the time that a trade is captured by the front office until the trade is fi
 
 ### Direct Communication
 
-Company A announces its intention to raise 2 Billion USD by way of rights issue. Because this is a voluntary action, Company A needs to ensure that complete details of the offer are sent to shareholders in real time, regardless of how many intermediaries are involved in the process (such as receiving/paying agents, CSD, ICSD, local/global custodian banks, asset management firms, etc). Once a shareholder has made a decision, that decision will also be processed and settled (including the new issuance of shares) in real time. If a shareholder sold its rights to a third party, the securities depository must be able to record the new shares under the name of their new rightful owner.
+A公司宣布他们公司计划通过股权发行的方式集资20亿美元。由于这属于有目标的有意行为，A公司必须必须保证这个提议的全部细节都能实时送到股东手中，不管这个过程中涉及到多少中间机构（如收款付款代理，中央证券托管机构，国际中央证券托管机构，本地或全球的托管银行，财产管理公司等）。一旦某个股东做出了决定，这个决定将会被实时处理（包括发行新股份）。 如果某个股东把他持有的股权转让给了第三方，证券保管机构必须能够把这些新股权记录在新的持有者名下。
 
 <img src="../images/Canonical-Use-Cases_Direct-Communication.png" width="900" height="416">
 
 &nbsp;
 
-### Separation of Asset Ownership and Custodian’s Duties
+### 财产所有权的分离和委托人的职责
 
-Assets should always be owned by their actual owners, and asset owners must be able to allow third-party professionals to manage their assets without having to pass legal ownership of assets to third parties (such as nominee or street name entities). If issuers need to send messages or payments to asset owners (for example, listed share holders), issuers send them directly to asset owners. Third-party asset managers and/or custodians can always buy, sell, and lend assets on behalf of their owners. Under this arrangement, asset custodians can focus on providing value-add services to shareowners, without worrying about asset ownership duties such as managing and redirecting payments from issuers to shareowners.
+财产应当永远属于它的真正所有者，而财产所有者必须能够在不转让财产所有权的情况下，让第三方的专业人员（如存管代理人）帮助他们管理财产。如果证券发行者想向财产拥有者发送消息（比如发送股东名单）或者汇款，发行者就需要直接发送给财产所有人。第三方财产管理或托管机构总是能够代表财产所有者进行财产的买卖及租赁。通过这样的安排，财产托管人可以专注于为股份持有者提供资产增值服务，而不用关心股权相关的责任，比如证券持有者和股东之间付款的管理和重定向问题等。
+
 
 <img src="../images/Canonical-Use-Cases_Separation-of-Asset-Ownership-and-Custodians-Duties.png" width="900" height="628">
 
 &nbsp;
 
-### Interoperability of Assets
+### 财产间的相互操作性
 
-If an organization requires 20,000 units of asset B, but instead owns 10,000 units of asset A, it needs a way to exchange asset A for asset B. Though the current market might not offer enough liquidity to fulfill this trade quickly, there might be plenty of liquidity available between asset A and asset C, and also between asset C and asset B. Instead of settling for market limits on direct trading (A for B) in this case, a chain network connects buyers with "buried" sellers, finds the best match (which could be buried under several layers of assets), and executes the transaction.
+如果某个机构需要20000个单位的B财产，同时它却拥有者10000个单位的A财产，那它就需要想出个办法吧A财产转换成B财产。尽管当前的市场并不能提供足够的资产流动性来满足这笔交易，但A财产和C财产，C财产和B财产之间却有着足够的可用流动性。与其想办法解决A财产和B财产之间的市场紧缺问题，区块链网络可以帮买家联系潜在的卖家（可能几次财产转化之后），匹配到最合适的卖家并执行交易。
+
 
 <img src="../images/Canonical-Use-Cases_Interoperability-of-Assets.png" width="900" height="480">
