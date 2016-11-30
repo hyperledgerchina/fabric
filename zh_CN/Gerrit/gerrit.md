@@ -38,7 +38,7 @@ Gerrit有一个**非常**有用的工具叫[Git复检](https://www.mediawiki.org
 git clone ssh://LFID@gerrit.hyperledger.org:29418/fabric && scp -p -P 29418 LFID@gerrit.hyperledger.org:hooks/commit-msg fabric/.git/hooks/
 ```
 
-**注意:** 当你克隆fabric项目的时候，最好将其克隆到`$GOPATH/src/github.com/hyperledger` 目录下，这样你可以通过[文档](../dev-setup/devenv.md)的步骤通过Vagrant来使用它.
+**注意:** 当你克隆fabric项目的时候，最好将其克隆到`$GOPATH/src/github.com/hyperledger` 目录下，这样你可以按照[文档](../dev-setup/devenv.md)的步骤通过Vagrant来使用它.
 
 4. 为你的本地克隆创建一个具有描述性名称的分支
 
