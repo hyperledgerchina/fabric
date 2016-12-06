@@ -1,29 +1,35 @@
-## Chaincode (Smart Contracts and Digital Assets)
+## 链码（智能合约和数字资产）
 
-&nbsp;
-##### Does the fabric implementation support smart contract logic?
-Yes. Chaincode is the fabric’s interpretation of the smart contract method/algorithm, with additional features.
+ 
 
-A chaincode is programmatic code deployed on the network, where it is executed and validated by chain validators together during the consensus process. Developers can use chaincodes to develop business contracts, asset definitions, and collectively-managed decentralized applications.
+##### Fabric是否实现支持智能合约？
 
-&nbsp;
-##### How do I create a business contract using the fabric?
-There are generally two ways to develop business contracts: the first way is to code individual contracts into standalone instances of chaincode; the second way, and probably the more efficient way, is to use chaincode to create decentralized applications that manage the life cycle of one or multiple types of business contracts, and let end users instantiate instances of contracts within these applications.
+是。 chaincode是部署在网络上的编程代码，其中它在共识过程中一起由链验证器执行和验证。开发人员可以使用链码来开发业务合同，资产定义和集中管理的分散应用程序。
 
-&nbsp;
-##### How do I create assets using the fabric?
-Users can use chaincode (for business rules) and membership service (for digital tokens) to design assets, as well as the logic that manages them.
+##### 如何使用Fabric创建业务合同？
 
-There are two popular approaches to defining assets in most blockchain solutions: the stateless UTXO model, where account balances are encoded into past transaction records; and the account model, where account balances are kept in state storage space on the ledger.
+通常有两种方法来开发业务合同：
 
-Each approach carries its own benefits and drawbacks. This blockchain fabric does not advocate either one over the other. Instead, one of our first requirements was to ensure that both approaches can be easily implemented with tools available in the fabric.
+​	第一种方式是将单个合同编码为独立的chaincode实例;
 
-&nbsp;
-##### Which languages are supported for writing chaincode?
-Chaincode can be written in any programming language and executed in containers inside the fabric context layer. We are also looking into developing a templating language (such as Apache Velocity) that can either get compiled into chaincode or have its interpreter embedded into a chaincode container.
+​	第二种方式以及可能更有效的方式是使用chaincode创建非中心化的应用程序，管理一种或多种类型的业务合同的生命周期，并让最终用户实例化这些应用程序中的合同实例。
 
-The fabric's first fully supported chaincode language is Golang, and support for JavaScript and Java is planned for 2016. Support for additional languages and the development of a fabric-specific templating language have been discussed, and more details will be released in the near future.
+##### 如何使用Fabric创建资产？
 
-&nbsp;
-##### Does the fabric have native currency?
-No. However, if you really need a native currency for your chain network, you can develop your own native currency with chaincode. One common attribute of native currency is that some amount will get transacted (the chaincode defining that currency will get called) every time a transaction is processed on its chain.
+用户可以使用chaincode（用于业务规则）和成员服务（用于数字令牌）设计资产，以及管理它们的逻辑。
+
+在大多数区块链解决方案中有两种常用的定义资产的方法：
+
+​	1.无状态UTXO模型，其中帐户余额被编码到过去的交易记录中；
+
+​	2.帐户模型，其中帐户余额保存在分类帐的状态存储空间中。
+
+每种方法都有其自身的优点和缺点。这种区块链Fabric不提倡这一个或者那一个。相反，我们的第一个要求是确保这两种方法都可以轻松的用fabric来实现。 
+
+##### 编写chaincode支持哪些语言？
+
+Chaincode可以用任何编程语言编写，并在结构上下文层内的容器中执行。我们还在寻找开发一种模板语言（如Apache Velocity），可以将其编译为chaincode或将其解释器嵌入到chaincode容器中。该架构的第一个完全支持的链码语言是Golang，并且计划在2016年支持JavaScript和Java。支持其他语言和开发面向架构的模板语言已经被讨论，更多的细节将在不久的将来发布。
+
+##### Fabric有货币政策吗？
+
+不，但是，如果你真的需要一个本地货币在你的区块链中，你可以用chaincode开发自己的本地货币。本地货币的一个常见属性是每次在其链上处理事务时，一些金额将被处理（定义该货币的链码将被调用）。
