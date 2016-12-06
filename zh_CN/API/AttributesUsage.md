@@ -1,96 +1,100 @@
 # Attributes usage
 
-## Overview
+## 概述
 
-The Attributes feature allows chaincode to make use of extended data in a transaction certificate. These attributes are certified by the Attributes Certificate Authority (ACA) so the chaincode can trust in the authenticity of the attributes' values.
+属性功能允许chaincode在事务认证中使用扩展数据。这些属性由属性证书颁发机构（ACA）认证，因此链码可以信任属性值的真实性。要查看关于属性设计的完整文档，请阅读“[属性支持](../tech/attributes.md)”。
 
-To view complete documentation about attributes design please read ['Attributes support'](../tech/attributes.md).
+属性功能允许chaincode使用事务证书中的扩展数据。这些属性由属性证书颁发机构（ACA）认证，因此链码可以信任属性值的真实性。
 
-## Use case: Authorizable counter
+要查看关于属性设计的完整文档，请阅读“属性支持”。
 
-A common use case for the Attributes feature is Attributes Based Access Control (ABAC) which allows specific permissions to be granted to a chaincode invoker based on attribute values carried in the invoker's certificate.
+## 用例：有效计数器
 
-['Authorizable counter'](../../examples/chaincode/go/authorizable_counter/authorizable_counter.go) is a simple example of ABAC, in this case only invokers whose "position" attribute has the value 'Software Engineer' will be able to increment the counter. On the other hand any invoker will be able to read the counter value.
+属性功能的一个常见用例是基于属性的访问控制（ABAC），它允许根据调用者证书中携带的属性值将特定权限授予链码调用者。
 
-In order to implement this example we used ['VerifyAttribyte' ](https://godoc.org/github.com/hyperledger/fabric/core/chaincode/shim#ChaincodeStub.VerifyAttribute) function to check the attribute value from the chaincode code.
+“[有效计数器](../../examples/chaincode/go/authorizable_counter/authorizable_counter.go)”是ABAC的一个简单示例，在这种情况下，只有“position”属性具有值“软件工程师”的调用者才能够增加计数器。另一方面，任何调用者都能够读取计数器值。
+
+为了实现这个例子，我们使用'[VerifyAttribyte](https://godoc.org/github.com/hyperledger/fabric/core/chaincode/shim#ChaincodeStub.VerifyAttribute) '函数从chaincode代码中检查属性值。
 
 ```
-isOk, _ := stub.VerifyAttribute("position", []byte("Software Engineer")) // Here the ABAC API is called to verify the attribute, just if the value is verified the counter will be incremented.
+isOk, _ := stub.VerifyAttribute("position", []byte("Software Engineer")) 
+//这里调用ABAC API来验证属性，只要该值被验证，计数器将增加。
 if isOk {
-    // Increment counter code
+    //递增计数器代码
 }
 ```
 
-The same behavior can be achieved by making use of ['Attribute support'](https://godoc.org/github.com/hyperledger/fabric/core/chaincode/shim/crypto/attr) API, in this case an attribute handler must be instantiated.
+通过使用“[属性支持](https://godoc.org/github.com/hyperledger/fabric/core/chaincode/shim/crypto/attr)”API可以实现相同的行为，在这种情况下必须实例化属性处理程序。
 
 ```
 attributesHandler, _ := attr.NewAttributesHandlerImpl(stub)
 isOk, _ := attributesHandler.VerifyAttribute("position", []byte("Software Engineer"))
 if isOk {
-    // Increment counter code
+    //递增计数器代码
 }
 ```
-If attributes are accessed more than once, using `attributeHandler` is more efficient since the handler makes use of a cache to store values and keys.
 
-In order to get the attribute value, in place of just verifying it, the following code can be used:
+如果属性被多次访问，则使用`attributeHandler`更有效，因为处理程序使用高速缓存来存储值和键。
+
+为了获取属性值，如果只是验证它，可以使用以下代码：
 
 ```
 attributesHandler, _ := attr.NewAttributesHandlerImpl(stub)
 value, _ := attributesHandler.GetValue("position")
 ```
 
-## Enabling attributes
+## 开启属性
 
-To make use of this feature the following property has to be set in the membersrvc.yaml file:
-
+要使用此功能，必须在membersrvc.yaml文件中设置以下属性：
 
 - aca.enabled = true
 
-Another way is using environment variables:
+另一种方法是使用环境变量：
 
 ```
 MEMBERSRVC_CA_ACA_ENABLED=true ./membersrvc
 ```
 
-## Enabling attributes encryption*
+## 开启属性加密*
 
-In order to make use of attributes encryption the following property has to be set in the membersrvc.yaml file:
+为了使用属性加密，必须在membersrvc.yaml文件中设置以下属性：
 
 - tca.attribute-encryption.enabled = true
 
-Or using environment variables:
+或者属性环境变量:
 
 ```
 MEMBERSRVC_CA_ACA_ENABLED=true MEMBERSRVC_CA_TCA_ATTRIBUTE-ENCRYPTION_ENABLED=true ./membersrvc
 ```
 
-### Deploy API making use of attributes
+### 部署API使用属性
 
 #### CLI
+
 ```
 $ ./peer chaincode deploy --help
-Deploy the specified chaincode to the network.
+将指定的chaincode部署到网络。
 
 Usage:
-  peer chaincode deploy [flags]
+  Peer 链码部署
 
 Global Flags:
-  -a, --attributes="[]": User attributes for the chaincode in JSON format
-  -c, --ctor="{}": Constructor message for the chaincode in JSON format
-  -l, --lang="golang": Language the chaincode is written in
-      --logging-level="": Default logging level and overrides, see core.yaml for full syntax
-  -n, --name="": Name of the chaincode returned by the deploy transaction
-  -p, --path="": Path to chaincode
+  -a, --attributes="[]": JSON格式的chaincode的用户属性
+  -c, --ctor="{}": JSON格式的chaincode的构造函数消息
+  -l, --lang="golang": 语言编写链码
+      --logging-level="": 默认日志记录级别和覆盖，有关完整语法，请参阅core.yaml
+  -n, --name="": 部署事务返回的chaincode的名称
+  -p, --path="": chaincode的路径
       --test.coverprofile="coverage.cov": Done
-  -t, --tid="": Name of a custom ID generation algorithm (hashing and decoding) e.g. sha256base64
-  -u, --username="": Username for chaincode operations when security is enabled
-  -v, --version[=false]: Display current version of fabric peer server
+  -t, --tid="": 自定义ID生成算法的名称（hash和解码） e.g. sha256base64
+  -u, --username="": 启用安全性时，chaincode操作的用户名
+  -v, --version[=false]: 显示Fabric peer服务器的当前版本
 ```
-To deploy a chaincode with attributes "company" and "position" it should be written in the following way:
+
+要部署具有属性“company”和“position”的chaincode，它应该以以下方式编写：
 
 ```
 ./peer chaincode deploy -u userName -n mycc -c '{"Function":"init", "Args": []}' -a '["position", "company"]'
-
 ```
 
 #### REST
@@ -116,33 +120,34 @@ POST host:port/chaincode
 }
 ```
 
-### Invoke API making use of attributes
+### 调用使用属性的API
 
 #### CLI
+
 ```
 $ ./peer chaincode invoke --help
-Invoke the specified chaincode.
+调用指定的chaincode。
 
 Usage:
-  peer chaincode invoke [flags]
+  peer chaincode 调用 [flags]
 
 Global Flags:
-  -a, --attributes="[]": User attributes for the chaincode in JSON format
-  -c, --ctor="{}": Constructor message for the chaincode in JSON format
-  -l, --lang="golang": Language the chaincode is written in
-      --logging-level="": Default logging level and overrides, see core.yaml for full syntax
-  -n, --name="": Name of the chaincode returned by the deploy transaction
-  -p, --path="": Path to chaincode
+  -a, --attributes="[]": JSON格式的chaincode的用户属性
+  -c, --ctor="{}": JSON格式的chaincode的构造方法消息
+  -l, --lang="golang": 写入chaincode的语言
+      --logging-level="": 默认日志记录级别和覆盖，请参阅core.yaml获取完整语法
+  -n, --name="": 部署事务返回的chaincode的名称
+  -p, --path="": chaincode的路径
       --test.coverprofile="coverage.cov": Done
-  -t, --tid="": Name of a custom ID generation algorithm (hashing and decoding) e.g. sha256base64
-  -u, --username="": Username for chaincode operations when security is enabled
-  -v, --version[=false]: Display current version of fabric peer server
+  -t, --tid="": 自定义ID生成算法（hash和解码）的名称。 e.g. sha256base64
+  -u, --username="": 启用安全性时chaincode操作的用户名
+  -v, --version[=false]: 显示Fabric peer服务器的当前版本
 ```
-To invoke "autorizable counter" with attributes "company" and "position" it should be written as follows:
+
+要调用具有属性“company”和“position”的“有效计数器”，它应该写成如下：
 
 ```
 ./peer chaincode invoke -u userName -n mycc -c '{"Function":"increment", "Args": []}' -a '["position", "company"]'
-
 ```
 
 #### REST
@@ -168,38 +173,39 @@ POST host:port/chaincode
 }
 ```
 
-### Query API making use of attributes
+### 查询API利用属性
 
 #### CLI
+
 ```
 $ ./peer chaincode query --help
-Query using the specified chaincode.
+使用指定的chaincode进行查询
 
 Usage:
-  peer chaincode query [flags]
+  peer chaincode 查询 [flags]
 
 Flags:
-  -x, --hex[=false]: If true, output the query value byte array in hexadecimal. Incompatible with --raw
-  -r, --raw[=false]: If true, output the query value as raw bytes, otherwise format as a printable string
+  -x, --hex[=false]: 如果为true，则以十六进制输出查询值字节数组。与--raw不兼容
+  -r, --raw[=false]: 如果为true，则将查询值作为原始字节输出，否则格式为可打印字符串
 
 
 Global Flags:
-  -a, --attributes="[]": User attributes for the chaincode in JSON format
-  -c, --ctor="{}": Constructor message for the chaincode in JSON format
-  -l, --lang="golang": Language the chaincode is written in
-      --logging-level="": Default logging level and overrides, see core.yaml for full syntax
-  -n, --name="": Name of the chaincode returned by the deploy transaction
-  -p, --path="": Path to chaincode
+  -a, --attributes="[]": JSON格式的chaincode的用户属性
+  -c, --ctor="{}": JSON格式的chaincode的构造方法消息
+  -l, --lang="golang": 写入chaincode的语言
+      --logging-level="": 默认日志记录级别和覆盖，请参阅core.yaml获取完整语法
+  -n, --name="": 部署事务返回的chaincode的名称
+  -p, --path="": chaincode的路径
       --test.coverprofile="coverage.cov": Done
-  -t, --tid="": Name of a custom ID generation algorithm (hashing and decoding) e.g. sha256base64
-  -u, --username="": Username for chaincode operations when security is enabled
-  -v, --version[=false]: Display current version of fabric peer server
+  -t, --tid="": 自定义ID生成算法（hash和解码）的名称。 e.g. sha256base64
+  -u, --username="": 启用安全性时chaincode操作的用户名
+  -v, --version[=false]: 显示Fabric peer服务器的当前版本
 ```
-To query "autorizable counter" with attributes "company" and "position" it should be written in this way:
+
+要用属性“company”和“position”查询“可自动计数器”，应该这样写：
 
 ```
 ./peer chaincode query -u userName -n mycc -c '{"Function":"read", "Args": []}' -a '["position", "company"]'
-
 ```
 
 #### REST
@@ -224,4 +230,5 @@ POST host:port/chaincode
   "id": 1
 }
 ```
-* Attributes encryption is not yet available.
+
+- **属性加密还不可用**。
