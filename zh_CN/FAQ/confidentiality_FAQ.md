@@ -1,13 +1,17 @@
 ## Confidentiality
-&nbsp;
 
-##### How is the confidentiality of transactions and business logic achieved?
-The security module works in conjunction with the membership service module to provide access control service to any data recorded and business logic deployed on a chain network.
+ 
 
-When a code is deployed on a chain network, whether it is used to define a business contract or an asset, its creator can put access control on it so that only transactions issued by authorized entities will be processed and validated by chain validators.
+##### 如何实现事务和业务逻辑的保密性？
 
-Raw transaction records are permanently stored in the ledger. While the contents of non-confidential transactions are open to all participants, the contents of confidential transactions are encrypted with secret keys known only to their originators, validators, and authorized auditors. Only holders of the secret keys can interpret transaction contents.
+安全模块与成员服务模块一起工作以向部署在链网络上的任何数据记录和业务逻辑提供访问控制服务。
 
-&nbsp;
-##### What if none of the stakeholders of a business contract are validators?
-In some business scenarios, full confidentiality of contract logic may be required – such that only contract counterparties and auditors can access and interpret their chaincode. Under these scenarios, counter parties would need to spin off a new child chain with only themselves as validators.
+当在链网络上部署代码时，无论其是用于定义业务合同还是资产，其创建者都可以对其进行访问控制，使得只有由授权实体发出的交易才会由链验证者处理和验证。
+
+原始交易记录永久存储在分类帐中。虽然非机密交易的内容对所有参与者开放，但是机密交易的内容使用仅为其发起者，验证者和授权审计员知道的秘密密钥加密。只有秘密密钥的持有者才能解释交易内容。
+
+
+
+##### 如果商业合同的所有利益相关者都不是验证者怎么办？
+
+在一些业务场景中，可能需要合同逻辑的完全保密性 - 从而只有合同交易对手和审计师可以访问和解释其链码。在这些情况下，反对方将需要分离一个只有自己作为验证者的新子链。
