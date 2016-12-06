@@ -1,5 +1,12 @@
-## Consensus Algorithm
+## 共识算法
 
-&nbsp;
-##### Which Consensus Algorithm is used in the fabric? 
-The fabric is built on a pluggable architecture such that developers can configure their deployment with the consensus module that best suits their needs. The initial release package will offer three consensus implementations for users to select from: 1) No-op (consensus ignored); and 2) Batch PBFT.
+ 
+
+##### 在Fabric中使用哪个共识算法？
+
+Fabric构建在可插拔的框架上，使得开发人员可以使用最适合其需要的一致性模块来配置其部署。初始发行包将提供三种一致的实现，供用户选择：
+
+1）无操作（忽略共识）;
+
+2）批量PBFT。
+(译注，说好的3呢。。 估计是SBFT)
