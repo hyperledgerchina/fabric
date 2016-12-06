@@ -1,18 +1,17 @@
-## Identity Management (Membership Service)
-&nbsp;
-##### What is unique about the fabric's Membership Service module?
-One of the things that makes the Membership Service module stand out from the pack is our implementation of the latest advances in cryptography.
+## 身份管理（会员服务）
 
-In addition to ensuring private, auditable transactions, our Membership Service module introduces the concept of enrollment and transaction certificates. This innovation ensures that only verified owners can create asset tokens, allowing an infinite number of transaction certificates to be issued through parent enrollment certificates while guaranteeing the private keys of asset tokens can be regenerated if lost. 
+ 
 
-Issuers also have the ability revoke transaction certificates or designate them to expire within a certain timeframe, allowing greater control over the asset tokens they have issued. 
+##### Fabric的Membership Service模块有什么独特之处？
 
-Like most other modules on the fabric, you can always replace the default module with another membership service option should the need arise.
+使会员服务模块脱颖而出的事情之一是我们实现了密码学的最新进展。
 
+除了确保私人的，可审计的交易，我们的会员服务模块介绍了注册和交易证书的概念。此创新确保只有经过验证的所有者才能创建资产令牌，允许通过父级注册证书颁发无限数量的交易证书，同时保证资产令牌的私钥在丢失时可以重新生成。
 
-&nbsp;
-##### Does its Membership Service make the fabric a centralized solution?
+发行人还有能力撤销交易证书或指定他们在一定时间内到期，从而更好地控制他们发行的资产令牌。
 
-No. The only role of the Membership Service module is to issue digital certificates to validated entities that want to participate in the network. It does not execute transactions nor is it aware of how or when these certificates are used in any particular network.
+与fabric上的大多数其他模块一样，如果需要，您可以随时用另一个成员服务选项替换默认模块(可插拔)。
 
-However, because certificates are the way networks regulate and manage their users, the module serves a central regulatory and organizational role.
+##### 成员服务是否使fabric变成中心化解决方案了？
+
+不。成员服务模块的唯一作用是向要参与网络的有效实体发放数字证书。它不执行事务，也不知道如何或何时在任何特定网络中使用这些证书。然而，由于证书是网络管理和管理用户的方式，因此模块服务于中央监管和组织角色。
